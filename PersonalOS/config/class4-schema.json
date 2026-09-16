@@ -1,0 +1,511 @@
+{
+  "source": "Class 4 supplied migration files; all seven tables column names confirmed against live record JSON in student app 2026-09-13. SQL types and PK/FK definitions sourced from migrations, not a fresh database catalog audit.",
+  "tables": [
+    {
+      "name": "posts",
+      "columns": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "post_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "platform",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "content_type",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "caption",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "published_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "post_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "like_count",
+          "type": "number",
+          "sqlType": "bigint"
+        },
+        {
+          "name": "comment_count",
+          "type": "number",
+          "sqlType": "bigint"
+        },
+        {
+          "name": "view_count",
+          "type": "number",
+          "sqlType": "bigint"
+        },
+        {
+          "name": "share_count",
+          "type": "number",
+          "sqlType": "bigint"
+        },
+        {
+          "name": "save_count",
+          "type": "number",
+          "sqlType": "bigint"
+        },
+        {
+          "name": "fetched_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "run_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "raw_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "notes",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "metadata",
+          "type": "object",
+          "sqlType": "jsonb"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        }
+      ],
+      "primaryKey": [
+        "workspace_id",
+        "post_id"
+      ]
+    },
+    {
+      "name": "media",
+      "columns": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "media_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "post_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "asset_index",
+          "type": "number",
+          "sqlType": "integer"
+        },
+        {
+          "name": "media_type",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "source_media_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "drive_file_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "drive_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "archive_status",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "notes",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "visual_analysis",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "reverse_engineering_prompt",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "prompt_notes",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "preview_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "preview_storage_path",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "poster_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "poster_storage_path",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "metadata",
+          "type": "object",
+          "sqlType": "jsonb"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "storage_bucket",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "storage_path",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "migration_status",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "migrated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "file_size_bytes",
+          "type": "number",
+          "sqlType": "bigint"
+        },
+        {
+          "name": "mime_type",
+          "type": "string",
+          "sqlType": "text"
+        }
+      ],
+      "primaryKey": [
+        "workspace_id",
+        "media_id"
+      ]
+    },
+    {
+      "name": "sources",
+      "columns": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "source_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "platform",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "account",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "profile_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "collection_reason",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "fetched_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "metadata",
+          "type": "object",
+          "sqlType": "jsonb"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        }
+      ],
+      "primaryKey": [
+        "workspace_id",
+        "source_id"
+      ]
+    },
+    {
+      "name": "runs",
+      "columns": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "run_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "provider",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "platform",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "requested_count",
+          "type": "number",
+          "sqlType": "integer"
+        },
+        {
+          "name": "collected_count",
+          "type": "number",
+          "sqlType": "integer"
+        },
+        {
+          "name": "request_count",
+          "type": "number",
+          "sqlType": "integer"
+        },
+        {
+          "name": "estimated_cost_usd",
+          "type": "number",
+          "sqlType": "numeric"
+        },
+        {
+          "name": "fetched_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "raw_url",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "metadata",
+          "type": "object",
+          "sqlType": "jsonb"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        }
+      ],
+      "primaryKey": [
+        "workspace_id",
+        "run_id"
+      ]
+    },
+    {
+      "name": "workspaces",
+      "columns": [
+        {
+          "name": "id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "owner_id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        }
+      ],
+      "primaryKey": [
+        "id"
+      ]
+    },
+    {
+      "name": "profiles",
+      "columns": [
+        {
+          "name": "id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        }
+      ],
+      "primaryKey": [
+        "id"
+      ]
+    },
+    {
+      "name": "legacy_records",
+      "columns": [
+        {
+          "name": "workspace_id",
+          "type": "string",
+          "sqlType": "uuid"
+        },
+        {
+          "name": "legacy_key",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "source_platform",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "endpoint",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "fetched_at_utc",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "record_id",
+          "type": "string",
+          "sqlType": "text"
+        },
+        {
+          "name": "raw_data",
+          "type": "object",
+          "sqlType": "jsonb"
+        },
+        {
+          "name": "created_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        },
+        {
+          "name": "updated_at",
+          "type": "string",
+          "sqlType": "timestamptz"
+        }
+      ],
+      "primaryKey": [
+        "workspace_id",
+        "legacy_key"
+      ]
+    }
+  ]
+}

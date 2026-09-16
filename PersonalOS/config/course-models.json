@@ -1,0 +1,29 @@
+{
+  "toapiBudgetCredits": 100,
+  "analysis": {
+    "provider": "toapis",
+    "model": "qwen3.5-flash",
+    "env": "TOAPI_API_KEY",
+    "status": "ig-image-pipeline-live-verified"
+  },
+  "image": {
+    "provider": "toapis",
+    "default": "gpt-image-2.5-flare",
+    "resolution": "1K",
+    "fallbackCandidates": [
+      "gpt-image-2.5-flare-vip",
+      "gpt-image-2.5-flare-official",
+      "gpt-image-2.5-sunburst",
+      "gpt-image-2.5-sunburst-vip",
+      "gpt-image-2.5-sunburst-official"
+    ],
+    "automaticPaidFallback": false,
+    "status": "default-implemented-fallback-candidates-require-validation"
+  },
+  "text": {
+    "model": "deepseek-v4-flash",
+    "provider": "toapis",
+    "env": "TOAPI_API_KEY",
+    "status": "live-verified"
+  }
+}

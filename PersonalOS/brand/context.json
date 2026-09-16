@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "owner": "leofongai",
+  "status": "student-source-needs-review",
+  "vaultRoot": "../.student-data/brand",
+  "canonical": {
+    "company": "company.md",
+    "voice": "voice.md",
+    "look": "look.md"
+  },
+  "writingSamples": [],
+  "assetManifest": "assets-manifest.json",
+  "missing": [
+    "Approved logo, portrait and reusable brand assets",
+    "Approved public writing examples"
+  ],
+  "websites": [],
+  "outputPlatforms": [
+    "Instagram",
+    "Threads"
+  ]
+}

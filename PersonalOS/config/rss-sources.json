@@ -1,0 +1,326 @@
+{
+  "source": "HeyOmmi-main checked-in RSS seeds; not a live production settings export",
+  "limitPerSource": 3,
+  "sources": [
+    {
+      "id": "techcrunch-ai",
+      "name": "TechCrunch: AI",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "the-decoder",
+      "name": "The Decoder",
+      "url": "https://the-decoder.com/feed/",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "marktechpost",
+      "name": "MarkTechPost",
+      "url": "https://www.marktechpost.com/feed/",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "simon-willison",
+      "name": "Simon Willison",
+      "url": "https://simonwillison.net/atom/everything/",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "huggingface-blog",
+      "name": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "google-ai-blog",
+      "name": "Google AI Blog",
+      "url": "https://blog.google/innovation-and-ai/technology/ai/rss/",
+      "template": "ai",
+      "enabled": true,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "coindesk",
+      "name": "CoinDesk",
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "template": "crypto",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "cointelegraph",
+      "name": "Cointelegraph",
+      "url": "https://cointelegraph.com/rss",
+      "template": "crypto",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "the-block",
+      "name": "The Block",
+      "url": "https://www.theblock.co/rss.xml",
+      "template": "crypto",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "decrypt",
+      "name": "Decrypt",
+      "url": "https://decrypt.co/feed",
+      "template": "crypto",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "bbc-world",
+      "name": "BBC World",
+      "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "bbc-business",
+      "name": "BBC Business",
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "template": "news",
+      "enabled": true,
+      "provenance": "20260915_personalos_feed_setup"
+    },
+    {
+      "id": "aljazeera",
+      "name": "Al Jazeera",
+      "url": "https://www.aljazeera.com/xml/rss/all.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "ars-technica",
+      "name": "Ars Technica",
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "template": "news",
+      "enabled": true,
+      "provenance": "20260727170000_feed_sources.sql"
+    },
+    {
+      "id": "openai-news",
+      "name": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "template": "ai",
+      "enabled": true,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "claude-code-releases",
+      "name": "Claude Code releases",
+      "url": "https://github.com/anthropics/claude-code/releases.atom",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "openai-codex-releases",
+      "name": "OpenAI Codex releases",
+      "url": "https://github.com/openai/codex/releases.atom",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "gemini-cli-releases",
+      "name": "Gemini CLI releases",
+      "url": "https://github.com/google-gemini/gemini-cli/releases.atom",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "venturebeat-ai",
+      "name": "VentureBeat AI",
+      "url": "https://venturebeat.com/category/ai/feed/",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "verge-ai",
+      "name": "The Verge: AI",
+      "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "mit-tech-review",
+      "name": "MIT Technology Review",
+      "url": "https://www.technologyreview.com/feed/",
+      "template": "ai",
+      "enabled": true,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "arxiv-cs-ai",
+      "name": "arXiv cs.AI",
+      "url": "https://rss.arxiv.org/rss/cs.AI",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "arxiv-cs-cl",
+      "name": "arXiv cs.CL",
+      "url": "https://rss.arxiv.org/rss/cs.CL",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "arxiv-cs-lg",
+      "name": "arXiv cs.LG",
+      "url": "https://rss.arxiv.org/rss/cs.LG",
+      "template": "ai",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "npr-world",
+      "name": "NPR World",
+      "url": "https://feeds.npr.org/1004/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "france24-en",
+      "name": "France 24",
+      "url": "https://www.france24.com/en/rss",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "dw-english",
+      "name": "Deutsche Welle",
+      "url": "https://rss.dw.com/xml/rss-en-all",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "cna-sg",
+      "name": "CNA (Singapore)",
+      "url": "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "scmp-hk",
+      "name": "South China Morning Post",
+      "url": "https://www.scmp.com/rss/2/feed",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "rthk-en",
+      "name": "RTHK News",
+      "url": "https://rthk.hk/rthk/news/rss/e_expressnews_elocal.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "mingpao-instant",
+      "name": "明報即時新聞",
+      "url": "https://news.mingpao.com/rss/ins/s00001.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "cna-taiwan",
+      "name": "中央社國際新聞",
+      "url": "https://feeds.feedburner.com/rsscna/intworld",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "nikkei-asia",
+      "name": "Nikkei Asia",
+      "url": "https://asia.nikkei.com/rss/feed/nar",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "bbc-science",
+      "name": "BBC Science",
+      "url": "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "bbc-health",
+      "name": "BBC Health",
+      "url": "https://feeds.bbci.co.uk/news/health/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "bbc-sport",
+      "name": "BBC Sport",
+      "url": "https://feeds.bbci.co.uk/sport/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "bbc-entertainment",
+      "name": "BBC Entertainment & Arts",
+      "url": "https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "sciencedaily",
+      "name": "ScienceDaily",
+      "url": "https://www.sciencedaily.com/rss/top/science.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "npr-health",
+      "name": "NPR Health",
+      "url": "https://feeds.npr.org/1128/rss.xml",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    },
+    {
+      "id": "hollywood-reporter",
+      "name": "The Hollywood Reporter",
+      "url": "https://www.hollywoodreporter.com/feed/",
+      "template": "news",
+      "enabled": false,
+      "provenance": "20260811024629_feed_sources_expansion.sql"
+    }
+  ]
+}

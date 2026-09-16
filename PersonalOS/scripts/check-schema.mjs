@@ -1,0 +1,2 @@
+import fs from 'node:fs';import path from 'node:path';import {createHash} from 'node:crypto';
+const root=path.resolve(import.meta.dirname,'../supabase');const lock=JSON.parse(fs.readFileSync(path.join(root,'schema-lock.json')));const hash=createHash('sha256').update(fs.readFileSync(path.join(root,lock.file))).digest('hex');if(hash!==lock.sha256)throw Error('Fixed SQL changed. Restore the teacher release; do not edit schema-lock.json to silence this check.');console.log('FIXED_SCHEMA_MATCH '+lock.version+' '+hash);

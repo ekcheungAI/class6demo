@@ -1,0 +1,9 @@
+{
+  "text": "deepseek-v4-flash",
+  "textProvider": "toapis",
+  "images": "gpt-image-2.5-flare",
+  "imageProvider": "toapis",
+  "imageResolution": "1K",
+  "toapiBudgetCredits": 50,
+  "status": "new-model-live-validation-pending"
+}

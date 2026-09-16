@@ -1,0 +1,11 @@
+import {readFile,writeFile,mkdir,open} from 'node:fs/promises';import path from 'node:path';import {ContentError,rootDir,changeContent} from './content-engine.mjs';
+export function requestBody(record){const messages=[{role:'system',content:record.request.system},{role:'user',content:JSON.stringify(record.request.user)}];if(Buffer.byteLength(JSON.stringify(messages))>24000)throw new ContentError('文字輸入最多24KB');return {model:'MiniMax-M3',messages,max_completion_tokens:4096,thinking:{type:'disabled'},reasoning_split:true,stream:false};}
+export async function generateRecord(id,version,{dir=rootDir(),key=process.env.MINIMAX_API_KEY,fetcher=fetch}={}){
+ if(!key)throw new ContentError('未配置MINIMAX_API_KEY');if(!/^[0-9a-f-]{36}$/.test(id))throw new ContentError('請求ID無效');
+ const r=JSON.parse(await readFile(path.join(dir,id+'.json'),'utf8'));if(r.status!=='awaiting_output'||r.version!==version)throw new ContentError('請求狀態已改',409);const body=requestBody(r);
+ await mkdir(dir,{recursive:true});let marker;try{marker=await open(path.join(dir,'minimax-'+id+'.attempt'),'wx',0o600);}catch{throw new ContentError('此MiniMax請求已嘗試，請核對，沒有自動重試',409);}await marker.close();
+ let response;try{response=await fetcher('https://api.minimax.io/v1/chat/completions',{method:'POST',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify(body),redirect:'error',signal:AbortSignal.timeout(90000)});}catch{throw new ContentError('MiniMax請求未完成；扣費狀態待核對，不自動重試');}
+ if(!response.ok)throw new ContentError('MiniMax回報HTTP '+response.status+'；請核對帳戶用量，不自動重試');const data=await response.json();await writeFile(path.join(dir,id+'.response.json'),JSON.stringify(data,null,2),{mode:0o600});if(data.choices?.[0]?.finish_reason!=='stop')throw new ContentError('MiniMax輸出未完整完成，原回應已保存');
+ let parsed;try{parsed=JSON.parse(data.choices[0].message.content);}catch{throw new ContentError('MiniMax未回傳有效JSON，原回應已保存，不自動重試');}
+ return changeContent(id,{action:'generated',expectedVersion:version,outputs:parsed.outputs,model:data.model||'MiniMax-M3',usage:data.usage||null,cost:{provider:'minimax',unit:'provider billing',amount:null,attribution:'Direct MiniMax; tokens recorded, monetary cost not verified; outside ToAPI credits'},requestId:data.id},dir);
+}

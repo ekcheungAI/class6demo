@@ -1,0 +1,195 @@
+[
+  {
+    "id": "preflight",
+    "time": "課前",
+    "title": "先連好，唔使入班先搵設定。",
+    "surface": "Codex",
+    "intro": "核對四個整合：Supabase、Google Drive、GitHub、Vercel。登入授權由你做；其餘檢查交Codex。",
+    "prompt": "p1",
+    "success": "整合已核對，勾選一次設定內的確認。",
+    "pending": false
+  },
+  {
+    "id": "local",
+    "time": "課前",
+    "title": "解壓一次，開返同一個專案。",
+    "surface": "Codex",
+    "intro": "下載老師ZIP並解壓；Codex開PersonalOS資料夾。API設定檔由老師另外提供，Codex合併到env，唔使手填keys。",
+    "prompt": "p2",
+    "success": "本機App顯示PersonalOS，使用自己的Supabase目標。",
+    "pending": false
+  },
+  {
+    "id": "database",
+    "time": "課前",
+    "title": "建立自己的資料庫與App登入。",
+    "surface": "Codex＋你授權",
+    "intro": "先跑全班固定SQL，再到Supabase Authentication建立App email／password。管理帳戶與App用戶係兩回事。",
+    "prompt": "p3",
+    "success": "Connections登入成功；有自己的workspace。",
+    "pending": false
+  },
+  {
+    "id": "import",
+    "time": "課前",
+    "title": "把上堂素材帶入新系統。",
+    "surface": "Codex",
+    "intro": "Codex讀自己的Sheet、整理欄位、試批再匯入。保留原文及連結，今堂唔搬Drive實體媒體。",
+    "prompt": "p4",
+    "success": "在Feed／Inspiration重新讀到自己的素材。",
+    "pending": false
+  },
+  {
+    "id": "brand",
+    "time": "20–40分鐘",
+    "title": "令佢認識你的品牌。",
+    "surface": "Codex訪問",
+    "intro": "Vault係資料來源，Ommi Brain係App使用的品牌設定。只回答差異，唔需要由零再填一次公司資料。",
+    "prompt": "p5",
+    "success": "一張已確認品牌卡：受眾、語氣、Look、平台、CTA。",
+    "pending": false
+  },
+  {
+    "id": "save-brand",
+    "time": "40–50分鐘",
+    "title": "保存品牌，做第一次Git備份。",
+    "surface": "Codex",
+    "intro": "保存Ommi Brain及品牌Skill；建立自己的private repo，中途commit／push。Git備份程式；Supabase保存內容。",
+    "prompt": "p6",
+    "success": "品牌刷新後仍在；自己的遠端repo有同一commit。",
+    "pending": false
+  },
+  {
+    "id": "brief",
+    "time": "50–55分鐘",
+    "title": "揀一則來源，講自己的觀點。",
+    "surface": "Codex訪問",
+    "intro": "由Feed／Inspiration按Create from this，或者貼來源／文字。分清來源聲稱、已核實事實與自己的觀點。",
+    "prompt": "p7",
+    "success": "同一份brief供所有平台及配圖使用。",
+    "pending": false
+  },
+  {
+    "id": "writing",
+    "steps": [
+      "先從Codex複製「貼入Creator Studio」輸入區塊：包含已確認角度、案例及CTA。",
+      "回到Creator Studio，貼入「你今日想講咩？」。由Feed／Inspiration帶入的來源卡保留；直接貼網址時連同角度一起貼。",
+      "選已確認的兩個社交平台，再選Video Script及Newsletter，共四個輸出。",
+      "按Rewrite into posts一次。完成後到Queue，確認四份草稿；不要再逐平台重複生成。"
+    ],
+    "time": "55–70分鐘",
+    "title": "一次題材，四份文字成果。",
+    "surface": "App操作",
+    "intro": "Creator Studio選兩個社交平台＋Video Script＋Newsletter，再按Rewrite into posts。一批生成，全部自動入Queue。",
+    "prompt": "p8",
+    "success": "Queue有四份內容，重新整理仍可讀回。",
+    "pending": false
+  },
+  {
+    "id": "reference",
+    "steps": [
+      "在Creator Studio找到「參考圖 → 品牌模板」。上載一張圖片，或點入貼圖框按Cmd+V／Ctrl+V。",
+      "若用帖文連結：貼IG／小紅書／X網址，按「讀取帖文圖片（TikHub計費）」，再按「選第…張」。",
+      "見到「已保存參考圖」預覽後選分析模式；第一次可沿用「自動」。",
+      "核對可用額度，按「分析圖片 · 預留20 credits」一次。等待出現分析結果，不要連按。",
+      "展開原圖觀察、可重用風格、中英Prompt、品牌版本及不確定項目；完成後到下一步保存模板。"
+    ],
+    "time": "80–100分鐘",
+    "title": "由一張好圖，拆出可重用做法。",
+    "surface": "App操作",
+    "intro": "上載／貼圖，或貼IG、小紅書、X連結；carousel只揀一張。先分析，唔急住生圖。",
+    "prompt": "p9",
+    "success": "能分清原圖觀察、風格配方同品牌版本。",
+    "pending": false
+  },
+  {
+    "id": "template",
+    "steps": [
+      "在分析結果中檢查及修改需要的內容，分清原圖主體與你想借用的視覺做法。",
+      "填「模板名稱」，在「最想保留」選構圖、色彩氛圍、字體排版或整體風格。",
+      "按「保存品牌模板」，確認「我的模板庫」出現這張模板。",
+      "重新整理後，在模板卡按「選用／編輯」；見到「生圖使用：模板名稱」才進入生圖。不要重新分析同一張圖。"
+    ],
+    "time": "100–115分鐘",
+    "title": "保存自己的品牌圖片模板。",
+    "surface": "App操作",
+    "intro": "選要保留的構圖／色彩／字體／整體風格，命名保存。下次換題材，不用重新分析同一張圖。",
+    "prompt": null,
+    "success": "模板重新開啟後仍有來源、prompt及品牌版本。",
+    "pending": false
+  },
+  {
+    "id": "image",
+    "steps": [
+      "先在模板庫按「選用／編輯」。往下到「為內容生成品牌配圖」，確認顯示正確模板名稱。",
+      "在「配圖目標」選今次的Queue平台草稿；獨立圖片則使用上方「你今日想講咩？」的內容。",
+      "選沿用模板品牌或最新Ommi Brain，填Visual direction及選比例。",
+      "按「預覽最終Prompt（不收費）」，核對題材、風格、品牌及額度。改設定後再預覽一次。",
+      "按Generate image一次，等待Supabase saved。到Queue重新整理，核對所選平台卡片有正確圖片。"
+    ],
+    "recovery": "如果圖片已保存但附圖失敗，保留這张圖片：重新整理Creator Studio，重新選配圖目標，再按圖片下的「附到所選Queue草稿」。不要重新生圖。",
+    "time": "115–135分鐘",
+    "title": "用模板，為文案生成配圖。",
+    "surface": "App操作",
+    "intro": "選模板＋Queue平台草稿，確認品牌、比例、prompt及額度，生成一張1K配圖。圖片只在Creator Studio製作。",
+    "prompt": "p10",
+    "success": "圖片永久保存；指定Queue卡片同時顯示文字及配圖。",
+    "pending": false
+  },
+  {
+    "id": "queue",
+    "steps": [
+      "到Queue按「重新讀取」，核對四份文字及所選平台的配圖；只有指定平台卡片有配圖亦屬正常。",
+      "有需要才按「編輯」及「保存文案」；修改或更換配圖會退回Draft。",
+      "在一篇草稿按「安排時間」，選未來日期、時間，核對括號內時區，再按「保存排期」。",
+      "切到Scheduled並重新整理，確認日期及內容仍在。想退回草稿就按「取消排期 → Draft」。到期不會自動發布。"
+    ],
+    "time": "135–150分鐘",
+    "title": "整理草稿，安排下一步。",
+    "surface": "App操作",
+    "intro": "在Queue核對、編輯，試保存排期再取消。Scheduled只係已安排，今堂唔會自動發布。",
+    "prompt": "p11",
+    "success": "Draft／Scheduled切換、重新整理及版本保存都正常。",
+    "pending": false
+  },
+  {
+    "id": "push",
+    "time": "150–155分鐘",
+    "title": "第二次備份，交接部署。",
+    "surface": "Codex",
+    "intro": "檢查tests／build、整理非敏感checkpoint，commit／push到自己的repo。不要把keys或私人原始資料放Git。",
+    "prompt": "p12",
+    "success": "本機HEAD與遠端一致，交接文件可由新對話讀取。",
+    "pending": false
+  },
+  {
+    "id": "deploy",
+    "time": "155–170分鐘",
+    "title": "把你的內容引擎放上網。",
+    "surface": "新Codex對話",
+    "intro": "同一PersonalOS專案，另開「PersonalOS部署」。Codex配置Vercel server env並部署；你只處理登入及目標選擇。",
+    "prompt": "p13",
+    "success": "關閉本機服務後，線上仍可登入並讀回成果。",
+    "pending": false
+  },
+  {
+    "id": "bonus-media",
+    "time": "課後Bonus",
+    "title": "之後先搬媒體。",
+    "surface": "獨立Codex對話",
+    "intro": "只在需要時搬指定媒體；保留原Drive檔及連結。唔阻塞今堂完成。",
+    "prompt": "p14",
+    "success": "一個小批次成功保存及讀回。",
+    "pending": false
+  },
+  {
+    "id": "bonus-brand",
+    "time": "課後Bonus",
+    "title": "將你的品牌變成Skill＋私人repo。",
+    "surface": "獨立Codex對話",
+    "intro": "把已確認品牌規則整理成可重用套件，之後其他專案可按需取得及安裝。",
+    "prompt": "p15",
+    "success": "私人repo、Skill版本、來源及新電腦使用方式清楚。",
+    "pending": false
+  }
+]

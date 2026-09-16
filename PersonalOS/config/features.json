@@ -1,0 +1,469 @@
+{
+  "items": [
+    {
+      "href": "/dashboard",
+      "label": "Home",
+      "zh": "首頁",
+      "icon": "Home",
+      "group": "main",
+      "lesson": null,
+      "implemented": true,
+      "visible": true
+    },
+    {
+      "href": "/feed",
+      "label": "Feed",
+      "zh": "精選資訊",
+      "icon": "Newspaper",
+      "group": "main",
+      "lesson": 5,
+      "implemented": false,
+      "visible": true
+    },
+    {
+      "href": "/inspiration",
+      "label": "Inspiration",
+      "zh": "靈感資料",
+      "icon": "Compass",
+      "group": "main",
+      "lesson": 5,
+      "implemented": false,
+      "visible": true
+    },
+    {
+      "href": "/collection",
+      "label": "Collection",
+      "zh": "素材收藏",
+      "icon": "Library",
+      "group": "main",
+      "lesson": null,
+      "implemented": true,
+      "visible": false
+    },
+    {
+      "href": "/creator-studio",
+      "label": "Creator Studio",
+      "zh": "內容工作室",
+      "icon": "Palette",
+      "group": "main",
+      "lesson": 5,
+      "implemented": true,
+      "visible": true
+    },
+    {
+      "href": "/slides-studio",
+      "label": "Slides Studio",
+      "zh": "投影片工作室",
+      "icon": "Presentation",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/classroom",
+      "label": "Classroom",
+      "zh": "課堂",
+      "icon": "GraduationCap",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/youtube-studio",
+      "label": "YouTube Studio",
+      "zh": "YouTube 工作室",
+      "icon": "Youtube",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/autopilot",
+      "label": "Autopilot",
+      "zh": "自動運作",
+      "icon": "Zap",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/queue",
+      "label": "Queue",
+      "zh": "草稿與排期",
+      "icon": "ListChecks",
+      "group": "main",
+      "lesson": 5,
+      "implemented": true,
+      "visible": true
+    },
+    {
+      "href": "/engage",
+      "label": "Engage",
+      "zh": "互動",
+      "icon": "MessagesSquare",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/voice",
+      "label": "Ommi Brain",
+      "zh": "品牌大腦",
+      "icon": "Brain",
+      "group": "main",
+      "lesson": 5,
+      "implemented": true,
+      "visible": true
+    },
+    {
+      "href": "/analytics",
+      "label": "Analytics",
+      "zh": "分析",
+      "icon": "ChartNoAxesCombined",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/open-mcp",
+      "label": "MCP",
+      "zh": "工具連接",
+      "icon": "Plug",
+      "group": "main",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/agency",
+      "label": "Agency",
+      "zh": "Agency",
+      "icon": "Sparkles",
+      "group": "development",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/video-studio/localize",
+      "label": "Localization Studio",
+      "zh": "Localization Studio",
+      "icon": "Sparkles",
+      "group": "development",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/story-mode",
+      "label": "Story Mode",
+      "zh": "Story Mode",
+      "icon": "Sparkles",
+      "group": "development",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/hook-lab",
+      "label": "Quick Hook",
+      "zh": "Quick Hook",
+      "icon": "Sparkles",
+      "group": "development",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/ads",
+      "label": "Meta Ads",
+      "zh": "Meta Ads",
+      "icon": "Sparkles",
+      "group": "development",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/script-lab",
+      "label": "Video Script",
+      "zh": "影片腳本",
+      "icon": "Clapperboard",
+      "group": "lesson5",
+      "lesson": 5,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/newsletter",
+      "label": "Newsletter",
+      "zh": "電子報",
+      "icon": "Mail",
+      "group": "lesson5",
+      "lesson": 5,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/model-costs",
+      "label": "Models & Costs",
+      "zh": "模型與成本",
+      "icon": "Coins",
+      "group": "lesson5",
+      "lesson": 5,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/skills",
+      "label": "My Skills",
+      "zh": "品牌改寫 Skill",
+      "icon": "WandSparkles",
+      "group": "lesson5",
+      "lesson": 5,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/connections",
+      "label": "Connections",
+      "zh": "資料連線",
+      "icon": "Database",
+      "group": "workspace",
+      "lesson": null,
+      "implemented": true,
+      "visible": true
+    },
+    {
+      "href": "/course",
+      "label": "Your Journey",
+      "zh": "課程地圖",
+      "icon": "Map",
+      "group": "workspace",
+      "lesson": null,
+      "implemented": true,
+      "visible": false
+    },
+    {
+      "href": "/settings",
+      "label": "Settings",
+      "zh": "我的設定",
+      "icon": "Settings",
+      "group": "workspace",
+      "lesson": null,
+      "implemented": true,
+      "visible": true
+    },
+    {
+      "href": "/admin",
+      "label": "Admin",
+      "zh": "管理",
+      "icon": "Settings",
+      "group": "workspace",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/video-studio",
+      "label": "Video Studio",
+      "zh": "Video Studio",
+      "icon": "Clapperboard",
+      "group": "workspace",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    },
+    {
+      "href": "/guides",
+      "label": "Guides",
+      "zh": "Guides",
+      "icon": "Library",
+      "group": "workspace",
+      "lesson": null,
+      "implemented": false,
+      "visible": false
+    }
+  ],
+  "subroutes": {
+    "/inspiration": [
+      {
+        "href": "/inspiration/twitter",
+        "label": "X (Twitter)",
+        "lesson": 5
+      },
+      {
+        "href": "/inspiration/threads",
+        "label": "Threads",
+        "lesson": 5
+      },
+      {
+        "href": "/inspiration/reddit",
+        "label": "Reddit",
+        "lesson": 5
+      },
+      {
+        "href": "/inspiration/video",
+        "label": "Video Sourcing",
+        "lesson": 5
+      },
+      {
+        "href": "/inspiration/instagram",
+        "label": "Instagram",
+        "lesson": 5
+      },
+      {
+        "href": "/inspiration/tiktok",
+        "label": "TikTok",
+        "lesson": 5
+      },
+      {
+        "href": "/inspiration/xhs",
+        "label": "Xiaohongshu",
+        "lesson": 5
+      }
+    ],
+    "/creator-studio": [
+      {
+        "href": "/creator-studio",
+        "label": "4:5 Posts",
+        "lesson": 5
+      },
+      {
+        "href": "/creator-studio/shoot",
+        "label": "Quick Shoot",
+        "lesson": null
+      },
+      {
+        "href": "/video-studio",
+        "label": "Video Studio",
+        "lesson": null
+      },
+      {
+        "href": "/video-studio/templates",
+        "label": "Video Templates",
+        "lesson": null
+      },
+      {
+        "href": "/video-studio/history",
+        "label": "Video History",
+        "lesson": null
+      },
+      {
+        "href": "/guides",
+        "label": "Guides",
+        "lesson": null
+      }
+    ],
+    "/youtube-studio": [
+      {
+        "href": "/youtube-studio",
+        "label": "Command Center",
+        "lesson": null
+      },
+      {
+        "href": "/youtube-studio/intel",
+        "label": "Intel",
+        "lesson": null
+      },
+      {
+        "href": "/youtube-studio/projects",
+        "label": "Projects",
+        "lesson": null
+      },
+      {
+        "href": "/youtube-studio/channel",
+        "label": "My Channel",
+        "lesson": null
+      }
+    ],
+    "/queue": [],
+    "/engage": [
+      {
+        "href": "/engage/threads",
+        "label": "Threads",
+        "lesson": null
+      },
+      {
+        "href": "/engage/x",
+        "label": "X",
+        "lesson": null
+      },
+      {
+        "href": "/engage/youtube",
+        "label": "YouTube",
+        "lesson": null
+      }
+    ],
+    "/voice": [
+      {
+        "href": "/voice",
+        "label": "Voice",
+        "lesson": 5
+      },
+      {
+        "href": "/voice?tab=look",
+        "label": "Look",
+        "lesson": 5
+      },
+      {
+        "href": "/voice?tab=sources",
+        "label": "Memory",
+        "lesson": 5
+      },
+      {
+        "href": "/voice?tab=progress",
+        "label": "Progress",
+        "lesson": 5
+      }
+    ],
+    "/feed": [
+      {
+        "href": "/feed/ai",
+        "label": "AI Newsroom",
+        "lesson": 5
+      },
+      {
+        "href": "/feed/crypto",
+        "label": "Crypto Newsroom",
+        "lesson": 5
+      },
+      {
+        "href": "/feed/news",
+        "label": "World Newsroom",
+        "lesson": 5
+      }
+    ],
+    "/video-studio": [
+      {
+        "href": "/video-studio",
+        "label": "Video Studio",
+        "lesson": null
+      },
+      {
+        "href": "/video-studio/templates",
+        "label": "Video Templates",
+        "lesson": null
+      },
+      {
+        "href": "/video-studio/history",
+        "label": "Video History",
+        "lesson": null
+      }
+    ]
+  },
+  "courseExcludedPrefixes": [
+    "/instagram-lab",
+    "/creator-studio/shoot",
+    "/script-lab",
+    "/youtube-studio",
+    "/collection"
+  ],
+  "studentNavigationLesson": 5
+}

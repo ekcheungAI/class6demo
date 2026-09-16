@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.env*
+!.env.example
+*.zip
+
+.student-data/
+.vercel
+supabase/.temp/
+
+*.tsbuildinfo

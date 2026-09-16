@@ -1,0 +1,17 @@
+# PersonalOS雲端runtime
+
+空project：執行01-bootstrap.sql，內含固定runtime函數。已有Class4結構：只執行02-runtime.sql，不清空資料。schema:check核對固定檔案。
+
+品牌：本機brand:connect讀取Vault；首次Ommi Brain保存會把有界限的品牌／Skill摘要寫入sources的system:brand-runtime。之後本機與Vercel都從該workspace讀取。更新Vault時，Codex整理摘要後以PUT /api/brand送入brand、skill、expectedRevision；版本不吻合必須重新讀取。不得把私有完整Vault提交Git。
+
+文字：POST /api/create以requestId認領，原provider回應先保存至runs，再驗證JSON及保存草稿。相同requestId不重新請求模型。POST同入口action=recover只恢復已保存結果；提交狀態未知需核對provider，不能按新ID盲目重試。
+
+圖片：POST /api/image建立請求；POST action=resume,taskId恢復該請求的provider查詢與保存，沒有新的生成呼叫。GET僅讀取已存狀態／歷史。保存使用固定workspace/requestId路徑；若路徑已存在，先比對內容hash，相同才沿用。
+
+額度：system:toapi-budget記錄有效limit與保守committed額度。每次20 credits預留保留，未知帳單不當0；共享provider帳戶餘額不當單一task扣費。本版仍需人工核對後結算保留額，不能把預留當已花費。遷移使用personalos_budget_import，只會保留更低上限／更高已承擔額及未確認狀態，不重置。
+
+部署：Codex在自己的Vercel project配置Supabase URL、publishable key、MINIMAX_API_KEY、TOAPI_API_KEY、STUDENT_TOAPI_BUDGET_CREDITS及表設定。自訂域名加入PERSONALOS_ALLOWED_ORIGINS；預設Vercel deployment及production域名由平台環境變數識別。server憑證不進NEXT_PUBLIC_。首次線上登入使用同一Supabase Auth帳戶，資料不依賴本機服務。
+
+部署前亦核對Git commit作者與已登入Vercel帳戶：本機自動產生的作者email可能不被Vercel識別。Codex只用學生已登入帳戶的正確資料設定此repo作者，不改全機設定、不冒用其他成員。
+
+本文件描述已實作機制，實際live驗收及剩餘缺口見RELEASE-GATES，不把部署build成功當全課完成。
