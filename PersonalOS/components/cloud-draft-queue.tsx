@@ -39,7 +39,7 @@ function QueueCard({card,token,routes,onChange}:{card:Card;token:string;routes:a
     {s==='approved'&&<button className="button" disabled={busy} onClick={async()=>{if(!confirm('只發一次。發出後唔可以收返。繼續？'))return;const d=await act('/api/publish',{action:'publish'});if(d){setResult(d.result);onChange();}}}>只發一次</button>}
     <button className="quiet" disabled={busy||s==='approved'} onClick={()=>setEditing(true)}>編輯</button>
    </div>
-   <details><summary>附件（圖）</summary><input placeholder="Storage 圖片 URL（或 fixture）" value={attachUrl} onChange={e=>setAttachUrl(e.target.value)}/><button className="quiet" disabled={busy||!attachUrl} onClick={async()=>{const d=await act('/api/cards',{action:'attach',attachment:{id:'img-'+Date.now().toString(36),url:attachUrl,kind:'image',mode:/example\.invalid|fixture/.test(attachUrl)?'DEMO':'LIVE'}});if(d){setAttachUrl('');onChange();}}}>附到卡（批準會失效）</button></details>
+   <details><summary>附件（圖）</summary><GeneratedImagePicker token={token} busy={busy} onPick={async taskId=>{const d=await act('/api/cards',{action:'attach',taskId});if(d)onChange();}}/><input placeholder="或者貼一個圖片 URL（fixture 用）" value={attachUrl} onChange={e=>setAttachUrl(e.target.value)}/><button className="quiet" disabled={busy||!attachUrl} onClick={async()=>{const d=await act('/api/cards',{action:'attach',attachment:{id:'img-'+Date.now().toString(36),url:attachUrl,kind:'image',mode:/example\.invalid|fixture/.test(attachUrl)?'DEMO':'LIVE'}});if(d){setAttachUrl('');onChange();}}}>附到卡（批準會失效）</button></details>
    <details><summary>排期</summary><label>日期及時間（{zone}）<input type="datetime-local" value={date} onChange={e=>setDate(e.target.value)}/></label><button className="button" disabled={busy||!date} onClick={async()=>{const d=await act('/api/cards',{action:'schedule',scheduledAt:new Date(date).toISOString(),timeZone:zone});if(d)onChange();}}>保存排期</button><p className="small-copy">Scheduled ≠ published。未批準嘅卡就算到時 runner 都唔會發。</p></details>
   </div>}
   {s==='scheduled'&&<button className="quiet" disabled={busy} onClick={async()=>{const d=await act('/api/cards',{action:'unschedule'});if(d)onChange();}}>取消排期 → {card.approval_valid?'approved':'draft'}</button>}
@@ -48,6 +48,12 @@ function QueueCard({card,token,routes,onChange}:{card:Card;token:string;routes:a
   {busy&&<p role="status">處理中…</p>}{error&&<p role="alert">{error}</p>}
   <details><summary className="small-copy">紀錄 {card.events?.length||0}</summary><ul className="small-copy">{(card.events||[]).slice(-8).map((e,i)=><li key={i}>{fmt(e.at)} · {e.action}{e.note?` · ${e.note}`:''}</li>)}</ul></details>
  </article>;
+}
+function GeneratedImagePicker({token,busy,onPick}:{token:string;busy:boolean;onPick:(taskId:string)=>void}){
+ const [items,setItems]=useState<any[]>([]),[open,setOpen]=useState(false);
+ useEffect(()=>{if(!open)return;fetch('/api/image',{headers:{Authorization:'Bearer '+token},cache:'no-store'}).then(r=>r.json()).then(d=>setItems(d.items||[])).catch(()=>setItems([]));},[open,token]);
+ if(!open)return <button className="quiet" onClick={()=>setOpen(true)}>揀一張已生成嘅圖（Creator Studio）</button>;
+ return <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(96px,1fr))',gap:8,margin:'8px 0'}}>{items.length?items.map(it=><button key={it.taskId} className="quiet" disabled={busy} title={it.prompt?.slice(0,120)} style={{padding:4}} onClick={()=>onPick(it.taskId)}>{it.signedUrl?<img src={it.signedUrl} alt="" style={{width:'100%',aspectRatio:'1',objectFit:'cover',borderRadius:6}}/>:it.taskId.slice(0,8)}</button>):<span className="small-copy">未有已生成嘅圖——去 Creator Studio 用模板出一張（Step 19）。</span>}</div>;
 }
 function LegacyList({items,token,onChange}:{items:any[];token:string;onChange:()=>void}){
  const entries=items.flatMap(record=>(record.revisions.at(-1)?.outputs||[]).map((output:any)=>({record,output,state:record.queue?.[output.platform]||{status:'draft'}})));

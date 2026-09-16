@@ -3,6 +3,7 @@ import {ContentError} from '@/lib/content-engine.mjs';
 import {l6Store} from '@/lib/l6-store.mjs';
 import {runOnce} from '@/lib/autopilot.mjs';
 import {accountFor} from '@/app/api/cards/route';
+import {imagePreview} from '@/lib/image-storage';
 export const dynamic='force-dynamic';export const maxDuration=90;
 // Vercel Cron calls this with `Authorization: Bearer ${CRON_SECRET}`.
 // The runner needs the workspace owner's Supabase session. Two stateless ways
@@ -28,7 +29,7 @@ export async function GET(request:Request){
  try{
   const secret=process.env.CRON_SECRET;const auth=request.headers.get('authorization')||'';
   if(!secret||auth!=='Bearer '+secret)return NextResponse.json({ok:false,message:'CRON_SECRET 未設或唔對'},{status:401});
-  const store=await l6Store(await session());const run=await runOnce(store,{trigger:'cron',accountFor});
+  const store=await l6Store(await session());const run=await runOnce(store,{trigger:'cron',accountFor,sign:(p:string)=>imagePreview(store.auth,p,store.workspace)});
   return NextResponse.json({ok:true,run},{headers:{'Cache-Control':'no-store'}});
  }catch(e){console.error('[cron]',e);return NextResponse.json({ok:false,message:e instanceof ContentError?e.message:'cron run 未完成'},{status:e instanceof ContentError?e.status:503});}
 }

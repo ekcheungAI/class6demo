@@ -7,3 +7,13 @@
 
 ## API文件路由
 處理任何provider的設定、測試、排錯或接駁前，先讀docs/API-PROVIDERS.md對應項目，再核對該provider最新相關官方文件；不猜endpoint、參數或模型。只讀今次需要的項目。備用provider不自動啟用，官方文件與key存在不授權花費或修改固定架構。
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

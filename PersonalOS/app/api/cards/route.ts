@@ -3,6 +3,7 @@ import {assertLocalRequest,ContentError} from '@/lib/content-engine.mjs';
 import {token} from '@/lib/api';
 import {l6Store} from '@/lib/l6-store.mjs';
 import {readSettings} from '@/lib/settings.mjs';
+import {cloudRuntime} from '@/lib/cloud-runtime.mjs';
 import {CARD_PREFIX,column,dryRun,approve,editContent,setRoute,attach,schedule,unschedule,approvalValid} from '@/lib/cards.mjs';
 export const dynamic='force-dynamic';
 function fail(e:unknown){return NextResponse.json({error:e instanceof ContentError?e.message:'卡未保存'},{status:e instanceof ContentError?e.status:503});}
@@ -24,7 +25,15 @@ export async function POST(request:Request){try{assertLocalRequest(request);cons
  if(body.action==='approve')card=approve(card,{accountId:account});
  else if(body.action==='edit')card=editContent(card,body.content,body.title);
  else if(body.action==='route')card=setRoute(card,String(body.route||''));
- else if(body.action==='attach')card=attach(card,body.attachment);
+ else if(body.action==='attach'){
+  let attachment=body.attachment;
+  if(body.taskId){ // a picture from the Class 5 image studio: verify it is a completed image job in this workspace
+   const runtime=await cloudRuntime(store.auth);const job=await runtime.job(String(body.taskId));
+   if(job.kind!=='image'||job.state!=='completed'||!job.record?.storagePath)throw new ContentError('圖片未完成保存，唔可以附卡');
+   attachment={id:job.id,storagePath:job.record.storagePath,url:'',kind:'image',mode:'LIVE'};
+  }
+  card=attach(card,attachment);
+ }
  else if(body.action==='schedule')card=schedule(card,{scheduledAt:body.scheduledAt,timeZone:body.timeZone});
  else if(body.action==='unschedule')card=unschedule(card);
  else throw new ContentError('未開放此操作');

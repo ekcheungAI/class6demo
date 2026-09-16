@@ -70,3 +70,13 @@ test('publish adapter: refuses stale approval, duplicate, cap; threads two-step;
  const before=calls.length;const v=await verifyCard(r.card,{env});assert.equal(v.result.status,'unknown');assert.equal(calls.length,before+1,'verify makes exactly one GET, no POST');
  await assert.rejects(()=>verifyCard(c,{env}),/只有 unknown/);
 });
+
+import {validateAccounts,mapSocial} from '../lib/social-inspiration.mjs';
+test('social accounts: handles normalised, platforms restricted, ≤10, rows land in the Inspiration tables',()=>{
+ const a=validateAccounts([{platform:'instagram',handle:'@EKcheungAI'},{platform:'twitter',handle:'https://x.com/ekcheungAI/'},{platform:'instagram',handle:'ekcheungai'}]);
+ assert.deepEqual(a.map(x=>x.id),['instagram:ekcheungai','twitter:ekcheungai']);
+ assert.throws(()=>validateAccounts([{platform:'tiktok',handle:'x'}]),/只支援/);
+ assert.throws(()=>validateAccounts(Array.from({length:11},(_,i)=>({platform:'twitter',handle:'u'+i}))),/最多/);
+ const m=mapSocial({source:{source_id:'instagram:ek',platform:'instagram',account:'ek',profile_url:'https://www.instagram.com/ek/'},posts:[{post_id:'instagram:ABC',platform:'instagram',account:'ek',caption:'hi',post_url:'https://www.instagram.com/p/ABC/',published_at:null,image_url:null,media_type:'post',metrics:{like_count:3}}],fetched_at:'2026-09-16T00:00:00.000Z'},'ws');
+ assert.equal(m.sources[0].metadata.inspiration_origin,'student-import');assert.equal(m.posts[0].metadata.inspiration_origin,'student-import');assert.equal(m.posts[0].like_count,3);assert.equal(m.posts[0].run_id,m.run.run_id);
+});

@@ -7,6 +7,7 @@ import {CARD_PREFIX,column,approvalValid} from '@/lib/cards.mjs';
 import {publishCard,verifyCard} from '@/lib/publish-adapter.mjs';
 import {accountFor} from '@/app/api/cards/route';
 import {publishLedger,countPublishedToday,logRun} from '@/lib/autopilot.mjs';
+import {imagePreview} from '@/lib/image-storage';
 export const dynamic='force-dynamic';export const maxDuration=90;
 function fail(e:unknown){console.error('[publish]',e);return NextResponse.json({error:e instanceof ContentError?e.message:'發布入口未完成；冇自動重試'},{status:e instanceof ContentError?e.status:503});}
 // POST {action:'publish', cardId} — one card, once, by a person clicking.
@@ -17,7 +18,7 @@ export async function POST(request:Request){try{assertLocalRequest(request);cons
  if(body.action==='publish'){
   if(settings.killSwitch)throw new ContentError('kill switch 開住：所有出街動作停',409);
   const ledger=await publishLedger(store);const used=await countPublishedToday(store);
-  ({result,card}=await publishCard(card,{workspaceId:store.workspace,accountId:account,ledger:ledger.keys,cap:{used,limit:settings.dailyPostCap}}));
+  ({result,card}=await publishCard(card,{workspaceId:store.workspace,accountId:account,ledger:ledger.keys,cap:{used,limit:settings.dailyPostCap},sign:(p:string)=>imagePreview(store.auth,p,store.workspace)}));
   await ledger.save();
   await logRun(store,{trigger:'manual',cards:[{card_id:card.card_id,platform:card.platform,route:card.publish_route,...result}],settings});
  }else if(body.action==='verify'){({result,card}=await verifyCard(card,{}));}

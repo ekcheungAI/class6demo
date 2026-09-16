@@ -28,7 +28,7 @@ export async function logRun(store,{trigger,cards=/** @type {any[]} */([]),setti
  * One run: due (scheduled_at ≤ now) cards whose approval is still valid, up to
  * the daily cap. Missing settings = off. Kill switch = first log line, then nothing.
  */
-export async function runOnce(store,{trigger='manual',accountFor,now=Date.now()}){
+export async function runOnce(store,{trigger='manual',accountFor,sign=/** @type {null|((p:string)=>Promise<string>)} */(null),now=Date.now()}){
  const settings=await readSettings(store);
  if(settings.killSwitch)return logRun(store,{trigger,settings,stopped:'stopped by kill switch'});
  if(trigger==='cron'&&!settings.autopilotEnabled)return logRun(store,{trigger,settings,stopped:'autopilot disabled (autopilot_enabled=false)'});
@@ -40,7 +40,7 @@ export async function runOnce(store,{trigger='manual',accountFor,now=Date.now()}
   // scheduled ≠ approved: the runner only publishes cards whose signature still holds
   if(!scheduled.was_approved||!scheduled.approval_hash){results.push({card_id:scheduled.card_id,platform:scheduled.platform,route:scheduled.publish_route,status:'refused',reason:'not_approved',note:'scheduled 但未批準：runner 唔會發'});continue;}
   const asApproved={...scheduled,publish_status:'approved'};
-  const {result,card}=await publishCard(asApproved,{workspaceId:store.workspace,accountId:account,ledger:ledger.keys,cap:{used,limit:settings.dailyPostCap}});
+  const {result,card}=await publishCard(asApproved,{workspaceId:store.workspace,accountId:account,ledger:ledger.keys,cap:{used,limit:settings.dailyPostCap},sign});
   if(result.status==='published')used++;
   const saved=result.status==='refused'||result.status==='skipped'?scheduled:card; // refused stays scheduled, untouched
   if(saved!==scheduled)await store.put(CARD_PREFIX+card.card_id,{provider:'composer',platform:card.platform,status:card.publish_status,metadata:card});

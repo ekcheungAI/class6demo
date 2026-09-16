@@ -21,7 +21,7 @@ export async function l6Store(token,{config=connectionConfig(),fetcher=fetch}={}
  }
  const q=(o)=>new URLSearchParams({workspace_id:'eq.'+workspace,...o}).toString();
  return {
-  workspace,client,rest,
+  workspace,client,rest,auth:token,
   async get(runId){const rows=await rest('runs?'+q({select:'metadata,status,updated_at',run_id:'eq.'+runId,limit:'1'}));return rows?.[0]||null;},
   async list(prefix,{limit=200,order='created_at.desc'}={}){return rest('runs?'+q({select:'run_id,status,metadata,created_at,updated_at',run_id:'like.'+prefix+'*',order,limit:String(limit)}));},
   /** Upsert one row; `metadata` replaces the whole document. */

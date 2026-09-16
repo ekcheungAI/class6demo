@@ -11,6 +11,12 @@
 //            → sync: results{platform:{url,post_id}} | async: request_id → GET /api/uploadposts/status?request_id=
 import {ContentError} from './content-engine.mjs';
 import {approvalValid,idempotencyKey} from './cards.mjs';
+/** Signed Storage URLs expire in an hour; sign again at the moment of sending. `sign(storagePath)` is injected by the route. */
+export async function freshAttachments(card,{sign}){
+ if(!sign||!(card.attachments||[]).some(a=>a.storagePath))return card;
+ const attachments=[];for(const a of card.attachments){attachments.push(a.storagePath?{...a,url:await sign(a.storagePath)}:a);}
+ return {...card,attachments};
+}
 
 const THREADS=()=>(process.env.THREADS_BASE||'https://graph.threads.net').replace(/\/+$/,'');
 const UPLOAD=()=>(process.env.UPLOAD_POST_BASE||'https://api.upload-post.com').replace(/\/+$/,'');
@@ -19,7 +25,7 @@ const t=(ms)=>AbortSignal.timeout(ms);
 
 async function threadsPost(path,form,token){
  const body=new URLSearchParams({...form,access_token:token});
- const r=await fetch(`${THREADS()}/v1.0/${path}`,{method:'POST',body,signal:t(30000)});
+ let r;try{r=await fetch(`${THREADS()}/v1.0/${path}`,{method:'POST',body,signal:t(30000)});}catch(e){return {ok:false,status:0,body:{error:{message:'連唔到 Threads（'+String(e?.cause?.code||e?.message||'network').slice(0,40)+'）'}}};}
  return {ok:r.ok,status:r.status,body:await j(r)};
 }
 export async function verifyThreads(publishedId,token){
@@ -33,15 +39,15 @@ async function uploadPostSend(card,{key,profile}){
  let path='/api/upload_text';
  if(hasImage){path='/api/upload_photos';for(const a of card.attachments)if(a.kind==='image')fd.append('photos[]',a.url);fd.append('title',card.content);}
  else fd.append('title',card.content);
- const r=await fetch(UPLOAD()+path,{method:'POST',headers:{Authorization:'Apikey '+key},body:fd,signal:t(60000)});
+ let r;try{r=await fetch(UPLOAD()+path,{method:'POST',headers:{Authorization:'Apikey '+key},body:fd,signal:t(60000)});}catch(e){return {ok:false,status:0,body:{error:'連唔到 Upload-Post（'+String(e?.cause?.code||e?.message||'network').slice(0,40)+'）'}};}
  return {ok:r.ok,status:r.status,body:await j(r)};
 }
 export async function verifyUploadPost(submittedId,key){
  const r=await fetch(`${UPLOAD()}/api/uploadposts/status?request_id=${encodeURIComponent(submittedId)}`,{headers:{Authorization:'Apikey '+key},signal:t(20000),cache:'no-store'});
  const b=await j(r);if(!r.ok)return {found:false,error:b?.error||('HTTP '+r.status)};
  const results=Array.isArray(b?.results)?b.results:Object.entries(b?.results||{}).map(([platform,v])=>({platform,...v}));
- const done=results.find(x=>x.success&&(x.url||x.post_url||x.post_id));
- return done?{found:true,public_url:done.url||done.post_url||null,published_id:done.post_id||done.publish_id||null,status:b.status}:{found:false,status:b?.status||'unknown',error:results.find(x=>x.success===false)?.message||results.find(x=>x.error)?.error||null};
+ const done=results.find(x=>x.success&&(x.url||x.post_url||x.post_id||x.platform_post_id));
+ return done?{found:true,public_url:done.url||done.post_url||null,published_id:done.platform_post_id||done.post_id||done.publish_id||null,status:b.status}:{found:false,status:b?.status||'unknown',error:results.find(x=>x.success===false)?.message||results.find(x=>x.error)?.error||null};
 }
 
 /**
@@ -49,7 +55,8 @@ export async function verifyUploadPost(submittedId,key){
  * sent for this workspace (persisted by the caller). Returns the updated card
  * plus a `result` the UI can show verbatim.
  */
-export async function publishCard(card,{workspaceId,accountId,ledger,env=process.env,cap}){
+export async function publishCard(input,{workspaceId,accountId,ledger,env=process.env,cap,sign=/** @type {null|((p:string)=>Promise<string>)} */(null)}){
+ const card=await freshAttachments(input,{sign});
  const key=idempotencyKey(workspaceId,card.card_id,card.content_hash);
  // Gate 1: the signature still matches this account + content + attachments
  if(card.publish_status!=='approved')return {result:{status:'refused',reason:'not_approved',note:'卡唔係 approved（'+card.publish_status+'）'},card};

@@ -53,9 +53,9 @@ export function setRoute(card,route){
 }
 
 export function attach(card,attachment){
- if(!attachment?.id||!attachment?.url)throw new ContentError('附件要有 id 同 url');
+ if(!attachment?.id||!(attachment?.url||attachment?.storagePath))throw new ContentError('附件要有 id 同 url（或 Storage 路徑）');
  const ids=[...new Set([...(card.attachment_ids||[]),String(attachment.id)])];
- return invalidate(card,'attached',{attachment_ids:ids,attachments:[...(card.attachments||[]).filter(a=>a.id!==attachment.id),{id:String(attachment.id),url:String(attachment.url),kind:attachment.kind||'image',mode:attachment.mode||'LIVE'}],note:'附件變咗，要再批'});
+ return invalidate(card,'attached',{attachment_ids:ids,attachments:[...(card.attachments||[]).filter(a=>a.id!==attachment.id),{id:String(attachment.id),url:String(attachment.url||''),storagePath:attachment.storagePath?String(attachment.storagePath):null,kind:attachment.kind||'image',mode:attachment.mode||'LIVE'}],note:'附件變咗，要再批'});
 }
 
 /** The dry-run pack: what the student signs. Nothing here calls a network. */

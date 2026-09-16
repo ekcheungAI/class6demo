@@ -20,6 +20,11 @@ export async function resolveSource(store,client,pick){
   const saved=(await client.articles(store.workspace)).find(a=>a.post_id===item.post_id);
   return {source_id:item.post_id,title:item.caption.split('\n')[0],url:item.post_url,text:saved?.article?.text?[item.caption,saved.article.text].join('\n\n'):item.caption,mode:'LIVE',depth:saved?.article?.text?'extracted-public-article':'rss-summary'};
  }
+ if(pick?.kind==='social'){
+  const posts=await client.inspirationPosts(store.workspace);const post=posts.find(p=>p.post_id===pick.postId);
+  if(!post)throw new ContentError('來源不在 Inspiration 已保存帖子內',404);
+  return {source_id:post.post_id,title:String(post.caption||'').split('\n')[0].slice(0,120),url:post.post_url,text:String(post.caption||''),mode:'LIVE',depth:'social-post'};
+ }
  const today=(await store.get(TODAY_SOURCE_ID))?.metadata;
  if(!today)throw new ContentError('未標「今日來源」。去 Inspiration → 搵靈感 → 揀一張寫理由。');
  if(today.mode==='DEMO'){return {source_id:today.source_id,title:today.title,url:today.url,text:DEMO_ARTICLE.replace(/^---[\s\S]*?---\n/,'').trim()||today.title,mode:'DEMO',depth:'fixture-article'};}

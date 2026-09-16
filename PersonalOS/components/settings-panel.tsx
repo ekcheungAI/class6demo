@@ -4,6 +4,19 @@ import {useEffect,useState} from 'react';
 type Rule={id:string;rule:string;scope:string;notScope:string;example:string;counterExample:string};
 type Src={id:string;name:string;url:string;enabled:boolean;origin?:string};
 const blank=(i:number):Rule=>({id:'R'+(i+1),rule:'',scope:'',notScope:'',example:'',counterExample:''});
+function SocialAccounts({token,settings,save,busy}:{token:string;settings:any;save:(p:any,l?:string)=>Promise<void>;busy:boolean}){
+ const [platform,setPlatform]=useState('instagram'),[handle,setHandle]=useState(''),[state,setState]=useState<any>(null),[result,setResult]=useState<Record<string,string>>({});
+ useEffect(()=>{fetch('/api/social',{headers:{Authorization:'Bearer '+token},cache:'no-store'}).then(r=>r.json()).then(setState).catch(()=>{});},[token,settings?.updatedAt]);
+ async function fetchPosts(id:string){setResult(v=>({...v,[id]:'抓緊…'}));try{const r=await fetch('/api/social',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({action:'fetch',accountId:id})});const d=await r.json();if(!r.ok)throw new Error(d.error);setResult(v=>({...v,[id]:d.saved?`存咗 ${d.saved} 篇 → 去 Inspiration 睇`:d.note||'冇新帖'}));}catch(e){setResult(v=>({...v,[id]:'✗ '+(e instanceof Error?e.message:'失敗')}));}}
+ return <div>
+  {state&&!state.tikhub&&<p role="alert">TIKHUB_API_KEY 未設——可以加帳戶，但抓唔到帖。</p>}
+  <form onSubmit={e=>{e.preventDefault();if(!handle)return;void save({socialAccounts:[...settings.socialAccounts,{platform,handle,enabled:true}]},'帳戶已加。撳「抓帖」先會 call TikHub。');setHandle('');}} style={{display:'grid',gridTemplateColumns:'auto 1fr auto',gap:8,alignItems:'end'}}>
+   <label>平台<select value={platform} onChange={e=>setPlatform(e.target.value)}><option value="instagram">Instagram</option><option value="twitter">X (Twitter)</option><option value="threads">Threads</option></select></label>
+   <label>帳戶名<input value={handle} onChange={e=>setHandle(e.target.value)} placeholder="例：ekcheungai（唔使 @）" required/></label><button className="button" disabled={busy||!handle}>加</button>
+  </form>
+  <ul className="small-copy" style={{marginTop:12}}>{(settings.socialAccounts||[]).map((a:any)=><li key={a.id}><strong>{a.platform}</strong> @{a.handle} <button className="quiet" disabled={busy||!state?.tikhub} onClick={()=>void fetchPosts(a.id)}>抓帖</button> <button className="quiet" disabled={busy} onClick={()=>void save({socialAccounts:settings.socialAccounts.filter((x:any)=>x.id!==a.id)})}>刪</button> {result[a.id]&&<em>{result[a.id]}</em>}</li>)}{!(settings.socialAccounts||[]).length&&<li className="muted">未追蹤任何帳戶。</li>}</ul>
+ </div>;
+}
 export default function SettingsPanel({token}:{token:string}){
  const [s,setS]=useState<any>(null),[sources,setSources]=useState<Src[]>([]),[runs,setRuns]=useState<any[]>([]),[busy,setBusy]=useState(false),[msg,setMsg]=useState(''),[error,setError]=useState(''),[tick,setTick]=useState(0),[newUrl,setNewUrl]=useState(''),[newName,setNewName]=useState('');
  useEffect(()=>{if(!token)return;const c=new AbortController();Promise.all([fetch('/api/settings',{headers:{Authorization:'Bearer '+token},cache:'no-store',signal:c.signal}).then(r=>r.json()),fetch('/api/autopilot',{headers:{Authorization:'Bearer '+token},cache:'no-store',signal:c.signal}).then(r=>r.json())]).then(([a,b])=>{if(a.error)throw new Error(a.error);setS(a.settings);setSources(a.rssSources);setRuns(b.runs||[]);}).catch(e=>{if(e.name!=='AbortError')setError(e.message);});return()=>c.abort();},[token,tick]);
@@ -33,6 +46,9 @@ export default function SettingsPanel({token}:{token:string}){
    {!s.rssSources.length&&<li className="muted">你未加任何來源；feed 照行預設嗰批（{sources.filter(x=>x.origin==='default').length} 個）。</li>}
   </ul>
   <details><summary className="small-copy">預設來源（{sources.filter(x=>x.origin==='default').length}）— 可以關</summary><ul className="small-copy">{sources.filter(x=>x.origin==='default').map(src=><li key={src.id}><label><input type="checkbox" checked={src.enabled} disabled={busy} onChange={e=>void save({disabledDefaultSources:e.target.checked?s.disabledDefaultSources.filter((id:string)=>id!==src.id):[...s.disabledDefaultSources,src.id]})}/> {src.name}</label></li>)}</ul></details>
+  <hr/>
+  <h3>2b · 追蹤社交帳戶（選做 Step 18）</h3><p className="muted">TikHub 抓一個帳戶最近 10 篇帖入 Inspiration；每次撳「抓帖」計一次費。Threads 嗰條 TikHub 而家唔穩定，讀唔到就跳過。</p>
+  <SocialAccounts token={token} settings={s} save={save} busy={busy}/>
   <hr/>
   <h3>3 · 每日出帖上限 &nbsp; 4 · Kill switch</h3>
   <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:12}}>

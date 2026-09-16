@@ -3,6 +3,7 @@
 // the whole point of Act 6: "會變嘅嘢存 DB，唔變嘅嘢先寫死".
 import {ContentError} from './content-engine.mjs';
 import {rssConfig} from './rss-feed.mjs';
+import {validateAccounts} from './social-inspiration.mjs';
 
 export const SETTINGS_ID='system:settings';
 export const MAX_VOICE_RULES=3;
@@ -17,6 +18,7 @@ export function defaultSettings(){
   killSwitch:false,
   autopilotEnabled:false,
   uploadPostProfile:'',       // chosen Upload-Post profile (username) for upload_post cards
+  socialAccounts:[],          // Optional Step 18: followed accounts [{id,platform,handle,enabled}] ≤10
   updatedAt:null,
  };
 }
@@ -38,7 +40,7 @@ export function validateSettings(input){
  const cap=Number(input.dailyPostCap);
  if(!Number.isInteger(cap)||cap<0||cap>10)throw new ContentError('每日上限要係 0–10 嘅整數');
  const disabled=[...new Set((Array.isArray(input.disabledDefaultSources)?input.disabledDefaultSources:[]).map(v=>short(v,60)).filter(Boolean))];
- return {version:1,voiceRules:rules,rssSources:sources,disabledDefaultSources:disabled,dailyPostCap:cap,killSwitch:input.killSwitch===true,autopilotEnabled:input.autopilotEnabled===true,uploadPostProfile:short(input.uploadPostProfile,80),updatedAt:new Date().toISOString()};
+ return {version:1,voiceRules:rules,rssSources:sources,disabledDefaultSources:disabled,dailyPostCap:cap,killSwitch:input.killSwitch===true,autopilotEnabled:input.autopilotEnabled===true,uploadPostProfile:short(input.uploadPostProfile,80),socialAccounts:validateAccounts(input.socialAccounts),updatedAt:new Date().toISOString()};
 }
 
 /** Always read fresh — never cache across requests. Missing row = defaults. */
