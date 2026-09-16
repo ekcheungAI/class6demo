@@ -13,20 +13,22 @@ export async function loadBrand(project=process.cwd(),vaultOverride=undefined){
   let vault=vaultOverride||path.resolve(brand,context.vaultRoot);
   const documents={};
   // A fresh clone has no `.student-data/brand` snapshot yet (it is gitignored and
-  // private). Fall back to the neutral starter docs instead of crashing every
-  // Brain / Rewrite call with ENOENT; the status tells the UI it is unconfigured.
+  // private). Fall back to the DEMO brand (fixtures/brain-sample.md as a vault)
+  // instead of crashing every Brain / Rewrite call with ENOENT. Status
+  // `demo-fixture` lets Brain save, Rewrite and image generation run — all
+  // labelled DEMO — until the student connects their own Vault (brand:connect).
   let status=context.status;
   try{await containedFile(vault,context.canonical.company);}
-  catch(e){if(e?.code!=='ENOENT')throw e;vault=path.join(brand,'starter');status='unconfigured';}
+  catch(e){if(e?.code!=='ENOENT')throw e;vault=path.join(brand,'demo');status='demo-fixture';}
   for(const name of ['company','voice','look']){
-    const source=status==='unconfigured'?name+'.md':context.canonical[name];
+    const source=status==='demo-fixture'?name+'.md':context.canonical[name];
     documents[name]={source,text:await readFile(await containedFile(vault,source),'utf8')};
   }
   const manifest=JSON.parse(await readFile(await containedFile(brand,context.assetManifest),'utf8'));
   const samples=[];
   for(const sample of context.writingSamples||[])samples.push({...sample,text:await readFile(await containedFile(vault,sample.path),'utf8')});
   const revision=createHash('sha256').update(JSON.stringify({context,documents,manifest,samples})).digest('hex').slice(0,12);
-  return {owner:status==='unconfigured'?'My Brand':context.owner,status,outputPlatforms:context.outputPlatforms||["Threads","Newsletter"],revision,documents,samples,assets:manifest.assets,missing:context.missing,websites:context.websites};
+  return {owner:status==='demo-fixture'?'阿晴工作室（DEMO）':context.owner,status,outputPlatforms:context.outputPlatforms||["Threads","Newsletter"],revision,documents,samples,assets:manifest.assets,missing:context.missing,websites:context.websites};
 }
 export async function brandAsset(id,project=process.cwd()){
  const root=path.join(project,'brand');
