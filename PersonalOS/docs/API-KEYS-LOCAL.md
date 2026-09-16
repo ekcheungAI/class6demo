@@ -4,7 +4,7 @@
 
 ## 操作
 1. 使用目前Codex專案。讀取專案旁private-credentials/CLASS05-API-KEYS.env；不存在才請學生提供該檔案路徑，不叫學生逐項貼key。
-2. 盤點專案已有env設定，只處理模板允許的變數。老師檔案中的provider key：缺值補入、相同值略過、不同值只列變數名稱讓學生選保留自己或採用老師的。TOAPIS_API_KEY對應TOAPI_API_KEY。
+2. 盤點專案已有env設定，只處理模板允許的變數。老師檔案中的provider key：缺值補入、相同值略過、不同值只列變數名稱讓學生選保留自己或採用老師的。TOPAPIS_API_KEY對應TOAPI_API_KEY。
 3. Supabase使用學生預填的project URL。從已授權的Supabase工具或已登入管理頁取得該project的publishable／anon key；不得使用老師project或service-role key。如果目前工具不能取得，只說明缺少哪個存取權並帶學生授權，不把整份env交回學生手填。
 4. 由Codex建立／合併.env.local，保留不相關欄位。檢查development／production的優先順序及衝突，不以空值蓋掉已有有效設定。來源檔保留。
 5. ToAPI總上限100 credits；已有較低值保留。文字deepseek-v4-flash經ToAPI，使用TOAPI_API_KEY；圖片ToAPI Flare 1K。文字及圖片合計。
