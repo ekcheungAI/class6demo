@@ -12,7 +12,7 @@ Owner提供的官方文件清單，2026-09-14登記。先讀本頁對應provider
 | MiniMax | AI／LLM | `MINIMAX_API_KEY` | [API Overview](https://platform.minimax.io/docs/api-reference/api-overview) | 備用，不再用於文字生成；舊測試401保留記錄 |
 | ToAPIs | Dashboard文字／圖片分析／生圖 | `TOAPI_API_KEY` | [中文Quickstart](https://docs.toapis.com/docs/cn/quickstart) | 文字與圖片adapter已提供；新學生環境仍須實測 |
 
-本app的ToAPIs變數是`TOAPI_API_KEY`（無S）。若學生已有`TOAPIS_API_KEY`，先只報存在／檔名，再經其確認對應到app支援名稱；不能假設兩個名稱已自動兼容、不能印出值或覆蓋另一條key。
+本app的ToAPIs變數是`TOAPI_API_KEY`（無S）。若學生已有`TOPAPIS_API_KEY`，先只報存在／檔名，再經其確認對應到app支援名稱；不能假設兩個名稱已自動兼容、不能印出值或覆蓋另一條key。
 
 ## Codex每次應怎樣用
 

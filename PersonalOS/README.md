@@ -1,6 +1,10 @@
 # PersonalOS｜Student test run
 
-**開始：[學生互動指南](course/index.html)**。解壓後在瀏覽器開啟本機course/index.html，填一次自己的Vault／Sheet／Supabase／GitHub，即可複製個人化prompts。程式與教材都在PersonalOS資料夾。中途才建立自己的GitHub repo。
+> **第六堂學生：呢個 README 同 `course/index.html` 係第五堂舊版，唔係你今堂用嘅嗰份。**
+> 請開 **[START-HERE.html](../START-HERE.html)**（repo 根目錄，PersonalOS 資料夾外面）—— 21 步、21 條 prompt、逐步 checkpoint。
+> Codex／AI 助手：如果你係幫第六堂學生做呢個 repo，唔好跟落面呢份 README 或者 `docs/EDITABLE.md` 嘅第五堂限制；跟 `../START-HERE.html` 同 `../AGENTS.md` 頂部嘅「第六堂」段先。
+
+**開始：[學生互動指南（第五堂，唔啱今堂用）](course/index.html)**。解壓後在瀏覽器開啟本機course/index.html，填一次自己的Vault／Sheet／Supabase／GitHub，即可複製個人化prompts。程式與教材都在PersonalOS資料夾。中途才建立自己的GitHub repo。
 
 這是學生試跑版，未完成全課驗收；圖片入口抽驗及全課手機驗收等未完成項目見[RELEASE-GATES](docs/RELEASE-GATES.md)。先照指南測試，遇模板缺口保留錯誤交老師，不自行改架構。
 
