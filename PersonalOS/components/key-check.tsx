@@ -90,7 +90,7 @@ export default function KeyCheck() {
         {(["pro", "free", "dry-run"] as const).map((t) => (
           <label key={t} style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: 14, whiteSpace: "nowrap" }}>
             <input type="radio" name="l6-track" checked={track === t} onChange={() => choose(t)} />{" "}
-            {t === "pro" ? "Pro（Threads + Upload-Post）" : t === "free" ? "Free（只 Threads）" : "Dry-run（唔出街）"}
+            {t === "pro" ? "Pro（兩條匙齊：Threads ＋ Upload-Post；唔係付費）" : t === "free" ? "Free（只有 Threads token）" : "Dry-run（今日冇匙，唔出街）"}
           </label>
         ))}
       </p>
