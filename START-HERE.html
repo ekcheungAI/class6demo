@@ -80,7 +80,10 @@ pre{margin:0;padding:14px;white-space:pre-wrap;word-break:break-word;font:15px/1
 .resc summary{cursor:pointer;padding:9px 12px;font-size:14px;font-weight:600;color:var(--dim)}
 .resc pre{background:transparent;padding:0 12px 10px;font-size:14px}
 .resc button{margin:0 12px 12px}
-code{font:.9em var(--mono);background:var(--vsoft);padding:1px 4px;border-radius:3px}
+code{font:.9em var(--mono);background:var(--vsoft);padding:1px 4px;border-radius:3px;
+ /* a long URL inside <code> pushed the page 31px wide at 390px — the one thing
+    that makes a page unusable on a phone in someone's lap */
+ overflow-wrap:anywhere;word-break:break-word}
 .note{font-size:14px;color:var(--dim)}
 footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);color:var(--dim);font-size:14px}
 @media print{.trk,button.copy,.tick{display:none}.step{break-inside:avoid;border-color:#ccc}body{background:#fff}}
