@@ -70,23 +70,22 @@ App secret **唔係出帖需要**——出帖淨係要 user token ＋ user id。
 
 ## 二、Upload-Post（`publish_route = upload_post`）
 
-一次過送去多個平台，所以佢係目標「一個來源 → 多個平台」唯一真正落地嘅路。
+一次過送去多個平台，所以佢係「一個來源 → 多個平台」唯一真正落地嘅路。
 
-- 條 key 喺 `https://app.upload-post.com/api-keys` 撳 Create（只完整顯示一次）。
-- 平台喺 Upload-Post 個後台先連好；你嘅 app 只攞住一條 key。
+**唔好靠呢份檔寫 code。叫 Codex 自己讀官方文件。**
+
+1. 條 key 喺 `https://app.upload-post.com/api-keys` 撳 Create（只完整顯示一次）。
+2. 平台喺 Upload-Post 個後台先連好；你嘅 app 只攞住一條 key。
+3. 叫 Codex 去 Upload-Post 官網搵 API 文件，**讀完先講返用邊個 endpoint、邊個認證 header**，
+   你 OK 咗佢先寫 code。呢個就係今日要養成嘅習慣：**唔好靠記憶改欄位名，對返文件。**
+
+呢份合約只鎖住**行為**，唔鎖 endpoint：
+
 - 送出之前先讀一次已連帳戶清單，確認目標平台狀態係「已連」——**未連就唔好送**。
-
-```
-GET  {UPLOAD_POST_BASE}/api/uploadposts/users        ← 讀已連帳戶
-POST {UPLOAD_POST_BASE}/api/upload_text | /api/upload ← 送出（一次可指定多個平台）
-```
-
-> ⚠️ **未核實：** base URL、認證 header（`Authorization: Apikey …` / `Bearer` / `x-api-key`）同
-> endpoint 路徑要對返 Upload-Post 官方文件先寫死落 code。呢份合約只鎖住**行為**：
-> 一次送出 → 攞返一個 request id（= `submitted_id`）→ 查狀態 → 每個平台各攞一個
-> post id／url（= `published_id` / `public_url`）。**一個來源送咗兩個平台，就要攞返兩組 ID，唔係一組。**
-
-Instagram 只行呢條路，而且**一定要有圖**——冇 attachment 嘅 IG 卡唔可以離開 draft。
+- 一次送出 → 攞返一個 request id（= `submitted_id`）。
+- 查狀態 → **每個平台各攞一個** post id／url（= `published_id` / `public_url`）。
+  **送咗兩個平台就要兩組 ID；一組 ID 對兩個平台 = 有嘢錯咗。**
+- Instagram 只行呢條路，而且**一定要有圖**——冇 attachment 嘅 IG 卡唔可以離開 draft。
 
 ## 三、三條唔准破嘅規矩
 
