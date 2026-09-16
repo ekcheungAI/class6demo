@@ -18,7 +18,7 @@ Queue ≥3 張 published 卡 ＋ 自動模式已開（cap 1）＋ 一張三行�
 
 ## 開始之前：換成你自己嗰條 key
 
-老師派嘅 key 課後會停用。攞你自己嗰條 `TOAPI_API_KEY`（課前老師會派開戶連結），換入 server env。打分、改寫、生圖三樣食同一條 key，所以換一次三樣一齊返生；`config/course-models.json` 一個字都唔使改。
+老師派嘅 key 課後會停用。去 TopAPIs 開戶攞你自己嗰條 key（課前老師會派連結），喺 server env 改 `TOAPI_API_KEY` 呢個變數嘅值——**變數名唔使改**，只係換值。打分、改寫、生圖三樣食同一條 key，所以換一次三樣一齊返生；`config/course-models.json` 一個字都唔使改。
 
 再出兩篇嗰陣**唔使重新搵料**，用你今日已經收集咗嘅卡就得。
 

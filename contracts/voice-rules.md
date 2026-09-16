@@ -1,6 +1,6 @@
 # voice-rules.md — 我把聲（由 Ommi Brain 抽出）
 
-狀態：`TBC · 未由本人確認`（Step 01 完成後改成 `CONFIRMED · <日期>`）
+狀態：`TBC · 未由本人確認`（Step 03 完成後改成 `CONFIRMED · <日期>`）
 
 ## 事實不變條款（不可刪）
 

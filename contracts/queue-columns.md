@@ -1,4 +1,6 @@
-# queue-columns.md — Queue 三欄
+# queue-columns.md — Queue 欄位
+
+> **你部機而家得兩欄：draft、scheduled。** 下面寫嘅 `published` 欄係目標形狀，唔係你今日打開就見到嘅嘢。合約嘅作用係唔准 AI 即場發明第三個答案，唔係描述現況。
 
 | 欄 | 對應 `publish_status` | 卡上必須顯示 |
 |---|---|---|

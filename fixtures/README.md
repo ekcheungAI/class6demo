@@ -1,6 +1,6 @@
 # fixtures/ — 學生嘅後備，唔只係老師嘅彩排資料
 
-全部係教學示例，**唔係真資料**；用到嘅輸出一律標 `DEMO`。你自己動手嗰啲步驟，Step 01–13 每一步都可以用呢度嘅檔完成——rate limit、冇權限、token 過期都唔會令你做唔到堂。Step 14 嘅圖 fixture 由老師課前放入，缺就喺驗收台寫 `SKIP · IMAGE`。
+全部係教學示例，**唔係真資料**；用到嘅輸出一律標 `DEMO`。你自己動手嗰啲步驟，Step 01–13 大部分步驟都可以用呢度嘅檔完成（Step 00 嘅草稿冇 fixture——Queue 空咗就等 Step 09 開第一張）——rate limit、冇權限、token 過期都唔會令你做唔到堂。Step 14 嘅圖 fixture 由老師課前放入，缺就喺驗收台寫 `SKIP · IMAGE`。
 
 | 檔 | 邊一步 | 來源／說明 |
 |---|---|---|
@@ -13,7 +13,7 @@
 | `stale-submitted-id.json` | Step 12 | 一個查唔到嘅舊 id，用嚟示範 UNKNOWN |
 | `runs-log-sample.json` | Step 17 | 三行 runs log，最後一行係 kill switch 停 |
 | `analytics-sample.csv` | Lesson 7 入場後備 | 三篇帖 × 三個數字，有缺值 |
-| `brand-image-sample.png` | Step 14 後備 | **由老師課前放入**（唔喺本 pack 內；缺就標 `TBC · IMAGE FIXTURE`） |
+| `brand-image-sample.png` | Step 14 後備 | **由老師課前放入**（唔喺本 pack 內；缺就標 `SKIP · IMAGE`） |
 | `brand-video-sample.mp4` | Step 15 | **由老師課前放入**（11s：logo／文案卡／CTA；缺就 Step 15 用口述） |
 
 老師課前要親自打開每一個檔一次。

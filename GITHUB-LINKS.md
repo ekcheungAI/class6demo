@@ -8,7 +8,7 @@
 
 ## 第二幕（Rewrite）
 - 模板更新：`git fetch` 老師 upstream 嘅 `lesson-06` tag（老師課前公布）。Prompt：「拉老師 lesson-06 更新到我嘅 branch，唔好覆蓋我自己改過嘅檔；有衝突列出嚟等我。」
-- Rewrite 引擎：**唔使裝、唔使換。** 你部機而家已經行緊 `deepseek-v4-flash`，經 `TOAPI_API_KEY` 呢條 key。設定喺 `config/course-models.json`，今日唔郁佢。
+- Rewrite 引擎：**唔使裝、唔使換。** 你部機而家已經行緊 `deepseek-v4-flash`，經 `TOAPI_API_KEY` 呢條 key。`config/course-models.json` 寫住個 model 名，但**冇 code 讀佢**——真正用嗰行喺 `lib/toapi.mjs`。今日兩個都唔郁，只係認住呢個形狀。
 - Skill：`humanizer-zh-tw`（可選，第三幕圈套話用）— 位置：TBC（老師課前確認）
 
 ## 第三幕（Connect）
@@ -19,7 +19,7 @@
 
 ## 第五幕（Post + Image）
 - Threads／Upload-Post adapter：由老師 release build 提供（`checkpoints/act-5-done/` 內），學生唔安裝第三方套件。
-- 圖：沿用 L5 嘅 TopAPIs 設定（`TOPAPIS_API_KEY` ↔ 模板 `TOPAPI_API_KEY`）。
+- 圖：沿用 L5 嘅 TopAPIs 設定（`TOPAPIS_API_KEY` ↔ 模板 `TOAPI_API_KEY`）。
 
 ## 第六幕（Queue + Schedule）
 - Vercel cron：`vercel.json` 已喺老師 release build；學生功課先啟用。
