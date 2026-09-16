@@ -6,6 +6,7 @@ import BrandBrain from "./brand-brain";
 import {ContentCollection,ContentHome} from "./content-workspace";
 import {LockedWorkflow} from "./workflow";
 import PublishConnections from "./publish-connections";
+import KeyCheck from "./key-check";
 import TeacherWorkbench from "./teacher-workbench";
 import NewsFeed from "./news-feed";
 import CloudDraftQueue from "./cloud-draft-queue";
@@ -661,6 +662,7 @@ export default function StudentOS() {
             <><ContentCollection rows={demo?(result?.rows||[]).map(r=>({...r,post_id:r.id,caption:r.title,__demo:true})):selected==="posts"?result?.rows||[]:[]} busy={busy} error={demo?"":error||(!conn?status:selected!=="posts"?"目前進階檢查選咗其他表，請下方選 posts 返回來源卡片。":"")} inspect={setDetail} select={r=>{setBriefSource(r);setBriefText(String(r.caption||""));router.push('/dashboard');}}/><details className="panel"><summary>進階：資料表、搜尋與分頁檢查</summary>{dataPanel}</details></>
           ) : route === "/connections" ? (
             <>
+              <KeyCheck/>
               <PublishConnections/>
               <div className="connection-layout">
                 <section className="panel">
