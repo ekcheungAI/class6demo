@@ -12,7 +12,7 @@
 - Skill：`humanizer-zh-tw`（可選，第三幕圈套話用）— 位置：TBC（老師課前確認）
 
 ## 第三幕（Connect）
-- 唔安裝任何嘢。Threads token 由學生自己喺 Meta 開發者後台攞；Upload-Post key 由 Pro 同學自己喺 Upload-Post 攞。**唔貼落任何 chat。**
+- 唔安裝任何嘢。Threads token 由學生自己喺 Meta 開發者後台攞；Upload-Post key 由 Pro 同學自己喺 https://app.upload-post.com/api-keys 撳 Create 攞（只顯示一次）。**唔貼落任何 chat。**
 
 ## 第四幕（Composer）
 - 唔安裝任何嘢；用 `contracts/composer-state-machine.md`。
