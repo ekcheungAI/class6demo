@@ -1,8 +1,12 @@
 import {mkdir,readFile,writeFile,rename,open,unlink,readdir} from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import {randomUUID} from 'node:crypto';
 export class ContentError extends Error{constructor(message,status=400){super(message);this.status=status;this.terminal=false;}}
-export const rootDir=()=>process.env.STUDENT_OUTPUT_DIR||path.join(process.cwd(),'.student-data');
+// Local records, budget ledger and click markers live on disk. On Vercel the
+// project directory is read-only, so fall back to /tmp (per-instance, ephemeral):
+// the cloud claim in lib/cloud-runtime.mjs is what actually guards the budget there.
+export const rootDir=()=>process.env.STUDENT_OUTPUT_DIR||(process.env.VERCEL?path.join(os.tmpdir(),'personalos-student-data'):path.join(process.cwd(),'.student-data'));
 const stamp=()=>new Date().toISOString();
 const platforms=['Threads','Newsletter','Instagram','X','LinkedIn','Video Script'];
 function required(value,name,max=30000){if(typeof value!=='string'||!value.trim()||value.length>max)throw new ContentError(name+' 內容缺漏或超長');return value;}
