@@ -1,6 +1,8 @@
 # START HERE — Lesson 6 專案形狀
 
-呢個 ZIP **唔係** starter app。你嘅 app 係上堂嘅 PersonalOS。呢個資料夾放喺 PersonalOS 旁邊（或者 `docs/lesson-06/` 入面），作用係：
+**app 正本喺 `PersonalOS/`，唯一一個。** 你部機行得好好就唔使碰佢；壞咗或者未部署，就 clone 佢做你嘅基準。
+
+下面呢批資料夾**唔係 app**，係放喺 app 旁邊嘅合約同示例：
 
 1. `AGENTS.md` — 今堂附加規則（AI 嘅規則書）。
 2. `contracts/` — 五份合約：靈感卡、voice rules、Composer 狀態機、批準定義、Queue 欄位。AI 唔准自己發明 schema。

@@ -1,12 +1,24 @@
-# class6demo — 第六堂課堂材料
+# class6demo — 第六堂：app 正本 ＋ 課堂材料
+
+呢個 repo 有**兩件嘢**，兩件都要：
+
+| | 係乜 | 你點用 |
+|---|---|---|
+| [`PersonalOS/`](PersonalOS) | **app 正本。唯一一個。** Next.js 專案，第五堂嗰部機 | Clone 落嚟，行 `npm install`，接返你自己嘅 Supabase／Vercel |
+| 其餘所有資料夾 | **今堂嘅合約、示例同步驟**。唔係 app，冇 code | 放喺 app 隔籬，堂上逐步跟 |
 
 **第一件事：用瀏覽器打開 [`START-HERE.html`](START-HERE.html)。** 19 步、19 條 prompt、可以逐條複製；填一次你嘅判斷，全部 prompt 自動代入。
 
 ---
 
-## 呢個 repo 係乜
+## 邊個要 clone `PersonalOS/`？
 
-第六堂嘅**課堂材料同合約**。放喺你部 PersonalOS 旁邊（或者 `docs/lesson-06/` 入面）。
+- **你第五堂部機行得好好** → 唔使碰 `PersonalOS/`。繼續用你自己嗰部。呢度只係一份對照正本。
+- **你部機壞咗／未部署／想由一個乾淨基準開始** → clone `PersonalOS/`，接返你自己嘅 Supabase 同 Vercel，就當係你第五堂嘅成果。
+
+無論邊種情況，**app 正本只有 `PersonalOS/` 一個**。冇第二個 template、冇舊 zip、冇其他 branch。
+
+## 其餘資料夾
 
 ```
 START-HERE.html          ← 由呢度開始。19 步、19 條 prompt、記得低你做到邊
@@ -23,19 +35,17 @@ homework/                Step 99
 .env.example             變數名清單。**真 key 由老師堂上私下派，永遠唔入呢個 repo**
 ```
 
-## 呢個 repo **唔係**乜
-
-**唔係 starter app。** 你部 app 係第五堂起嗰個 PersonalOS。呢度冇 Next.js、冇 package.json、冇任何跑得起嘅 code。
-
-呢度嘅嘢係**預先決定咗 schema、合約同驗收條件**，令 AI 唔可以即場發明。
+呢啲**唔係 code**，係**預先決定咗嘅 schema、合約同驗收條件**，令 AI 唔可以即場發明。
 
 ## 聽日點用
 
-1. Clone 或者下載呢個 repo，放喺你 PersonalOS 隔籬
+1. Clone 呢個 repo
 2. 開 `START-HERE.html`
 3. 上面填一次七格（你讀者今星期要決定乜、最想守住邊條 voice rule⋯）
 4. 揀你今日行邊條 track
 5. 跟住逐步做，每步複製 prompt、對返「見到呢個結果先繼續」
+
+你今日改嘅 code 係改**你自己部機**（你第五堂嗰個 repo，或者你 clone 咗嘅 `PersonalOS/`）。唔係改呢個 repo。
 
 ## 三條 track
 
