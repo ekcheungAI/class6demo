@@ -17,7 +17,7 @@ export default function ResearchPanel({token}:{token:string}){
   {keys&&<p className="small-copy">Key 狀態（只顯示有冇，唔顯示值）：Exa {keys.exa?'✓':'✗'} · Firecrawl {keys.firecrawl?'✓':'✗'} · Tavily {keys.tavily?'✓':'✗'} · TopAPIs {keys.toapi?'✓':'✗'}{!keys.exa&&!keys.firecrawl&&' — 冇搜尋 key，會出 fixtures 五張 DEMO 卡'}</p>}
   <form onSubmit={e=>{e.preventDefault();void post({action:'run',decision});}} style={{display:'grid',gap:8,marginBottom:16}}>
    <label>我讀者今個星期要決定嘅係<input value={decision} onChange={e=>setDecision(e.target.value)} placeholder="例：值唔值得用 AI 幫手出帖" maxLength={120} required/></label>
-   <div><button className="button" disabled={busy}>{busy?'搵緊…（~20 秒）':'搵靈感'}</button></div>
+   <div><button className="button" disabled={busy}>{busy?'搵緊…（LIVE 約 1 分鐘：搵 → 讀 3 頁 → 打分）':'搵靈感'}</button></div>
   </form>
   {error&&<p role="alert">{error}</p>}
   {today&&<p className="small-copy" style={{padding:12,border:'1px solid #7C5CFF',borderRadius:8}}><strong>今日來源：</strong>{today.source_id} · {today.title}<br/>理由：{today.reason}{today.mode==='DEMO'&&' · DEMO'}</p>}

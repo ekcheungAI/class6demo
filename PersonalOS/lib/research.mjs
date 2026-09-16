@@ -12,6 +12,12 @@ export const TODAY_SOURCE_ID='system:today-source';
 const DEMO=JSON.parse(await readFile(new URL('../config/research-demo-cards.json',import.meta.url),'utf8'));
 
 const j=async(r)=>{try{return await r.json();}catch{return null;}};
+/** Firecrawl markdown → the first ~400 chars of body prose (no nav links, images, cookie banners). */
+export function cleanExcerpt(md){
+ const lines=String(md||'').replace(/!\[[^\]]*\]\([^)]*\)/g,'').replace(/\[([^\]]*)\]\([^)]*\)/g,'$1').split('\n').map(l=>l.replace(/^[#>*\-\s|]+/,'').trim());
+ const prose=lines.filter(l=>l.length>=40&&!/隱私|cookie|同意|訂閱|登入|分享|Skip to|跳至|廣告|©/i.test(l));
+ return prose.join(' ').replace(/\s+/g,' ').slice(0,400)||null;
+}
 const timeout=(ms)=>AbortSignal.timeout(ms);
 
 export function buildQuery(brain,decision){
@@ -38,7 +44,7 @@ async function firecrawlScrape(url,key,log){
  const d=await j(r);log.push({provider:'firecrawl',op:'scrape',calls:1,http:r.status,credits:r.ok?1:0,url});
  if(!r.ok)return null;
  const md=d?.data?.markdown||'';const meta=d?.data?.metadata||{};
- return {excerpt:md.replace(/\s+/g,' ').slice(0,400),published_at:meta.publishedTime||meta['article:published_time']||null,title:meta.title||null};
+ return {excerpt:cleanExcerpt(md),published_at:meta.publishedTime||meta['article:published_time']||null,title:meta.title||null};
 }
 async function tavilyCheck(claim,key,log){
  const r=await fetch('https://api.tavily.com/search',{method:'POST',headers:{Authorization:'Bearer '+key,'Content-Type':'application/json'},body:JSON.stringify({query:claim,search_depth:'basic',max_results:3}),signal:timeout(20000)});
