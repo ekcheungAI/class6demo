@@ -24,7 +24,7 @@ const PICK_KEY = "personalos-upload-post-profile";
  * Act 5 — whether this token may publish at all — while there is still time
  * to do something about it.
  */
-export default function PublishConnections() {
+export default function PublishConnections({token}:{token?:string}={}) {
   const [threads, setThreads] = useState<ThreadsState | null>(null);
   const [upload, setUpload] = useState<UploadState | null>(null);
   const [busy, setBusy] = useState(false);
@@ -68,6 +68,14 @@ export default function PublishConnections() {
     } catch {
       /* ignore */
     }
+    // The card's publish route reads the profile from settings (server side),
+    // so the pick has to live in Supabase too, not only in this browser.
+    if (token)
+      void fetch("/api/settings", {
+        method: "PUT",
+        headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ uploadPostProfile: name }),
+      });
   };
 
   return (
