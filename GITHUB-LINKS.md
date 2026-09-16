@@ -18,7 +18,7 @@
 - 唔安裝任何嘢；用 `contracts/composer-state-machine.md`。
 
 ## 第五幕（Post + Image）
-- Threads／Upload-Post adapter：由老師 release build 提供（`checkpoints/act-5-done/` 內），學生唔安裝第三方套件。
+- Threads／Upload-Post adapter：**你自己喺第三幕（Step 06／07）裝**，規格見 `contracts/publish-adapter.md`。唔使等老師派 —— 裝嗰陣發布開關關住，第五幕先開，學生唔安裝第三方套件。
 - 圖：沿用 L5 嘅 TopAPIs 設定（`TOPAPIS_API_KEY` ↔ 模板 `TOAPI_API_KEY`）。
 
 ## 第六幕（Queue + Schedule）
