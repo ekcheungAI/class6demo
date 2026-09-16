@@ -11,6 +11,9 @@ import NewsFeed from "./news-feed";
 import CloudDraftQueue from "./cloud-draft-queue";
 import InspirationWorkspace from "./inspiration-workspace";
 import InspirationHub from "./inspiration-hub";
+import ResearchPanel from "./research-panel";
+import Composer from "./composer";
+import SettingsPanel from "./settings-panel";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { SupabaseClient } from "@supabase/supabase-js";
 import {
@@ -53,6 +56,7 @@ import {
   Moon,
   AlertCircle,
   Eye,
+  LayoutTemplate,
 } from "lucide-react";
 import {
   features,
@@ -67,6 +71,7 @@ import {
 import { demoTables, demoResult } from "@/lib/demo.mjs";
 const icons: Record<string, typeof Home> = {
   Home,
+  LayoutTemplate,
   Newspaper,
   Compass,
   Library,
@@ -652,7 +657,7 @@ export default function StudentOS() {
           ) : route.startsWith('/feed') ? (
             <NewsFeed token={token} choose={r=>{setBriefSource(r);setBriefText(String((r.article as {text?:string}|undefined)?.text||r.caption||''));router.push('/creator-studio');}}/>
           ) : route === "/inspiration" ? (
-            <InspirationHub token={token}/>
+            <><ResearchPanel token={token}/><InspirationHub token={token}/></>
           ) : /^\/inspiration\/(instagram|tiktok|xhs|twitter|threads|reddit|all)$/.test(route) ? (
             <InspirationWorkspace key={route} initialPlatform={route.endsWith('/xhs')?'xiaohongshu':route.split('/').at(-1)} token={token} choose={r=>{setBriefSource(r);setBriefText(String((r.article as {text?:string}|undefined)?.text||r.caption||''));router.push('/creator-studio');}}/>
           ) : route === "/voice" ? (
@@ -797,8 +802,10 @@ export default function StudentOS() {
                 </button>
               </section>
             </>
+          ) : route === "/composer" ? (
+            <Composer key={token} token={token}/>
           ) : route === "/settings" ? (
-            <section className="panel settings">
+            <><SettingsPanel key={token} token={token}/><section className="panel settings">
               <h2>換成你嘅工作空間</h2>
               <p className="muted">設定只保存在這個瀏覽器，不寫入 Supabase。</p>
               <form
@@ -853,7 +860,7 @@ export default function StudentOS() {
                 <Download size={16} />
                 匯出課程地圖
               </button>
-            </section>
+            </section></>
           ) : route === "/course" ? (
             <>
               <section className="journey-hero">

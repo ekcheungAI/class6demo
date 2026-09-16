@@ -9,13 +9,15 @@ import {assertLocalRequest,ContentError,rootDir,prepareRequest,createRecord} fro
 import {token} from '@/lib/api';
 import {readArticle} from '@/lib/article-reader.mjs';
 import {runtimeBrain} from '@/lib/ommi-brain.mjs';
+import {l6Store} from '@/lib/l6-store.mjs';
+import {readSettings,voiceRulesPrompt} from '@/lib/settings.mjs';
 export const dynamic='force-dynamic';
 export async function POST(request:Request){let draftId;
  try{assertLocalRequest(request);if(process.env.STUDENT_TEACHER_PREVIEW!=='1')throw new ContentError('此版本尚未開放生成',403);
  const body=await request.json();if(typeof body.requestId!=='string'||! /^[0-9a-f-]{36}$/.test(body.requestId))throw new ContentError('缺少請求識別碼');
  const client=feedClient(token(request));const workspace=await client.workspace();const feed=await client.read(workspace,'rss');const source=feed.items.find(i=>i.post_id===body.postId);if(!source)throw new ContentError('來源不在目前workspace可讀Feed內',404);
- const saved=(await client.articles(workspace)).find((a:any)=>a.post_id===source.post_id);source.article=saved?.article||await client.saveArticle(workspace,source.post_id,await readArticle(source.post_url));
+ const saved=(await client.articles(workspace)).find((a:any)=>a.post_id===source.post_id);const settings=await readSettings(await l6Store(token(request)!));source.article=saved?.article||await client.saveArticle(workspace,source.post_id,await readArticle(source.post_url,settings.rssSources));
  await mkdir(rootDir(),{recursive:true});let marker;try{marker=await open(path.join(rootDir(),'feed-click-'+body.requestId+'.marker'),'wx',0o600);}catch{throw new ContentError('此點擊已處理，不會重複生成',409);}await marker.close();
- const localBrand=await loadBrand();const brand=runtimeBrain(localBrand,await client.ommiBrain(workspace));const skill=await readFile(path.join(process.cwd(),'.agents/skills/my-branding-skill/SKILL.md'),'utf8');const prepared=await createRecord(prepareRequest(feedBrief(source,{...brand,outputPlatforms:brand.brainProfile.platforms.filter((p:any)=>p.enabled).map((p:any)=>p.id)}),brand,skill));draftId=prepared.id;
+ const localBrand=await loadBrand();const brand=runtimeBrain(localBrand,await client.ommiBrain(workspace));const skill=await readFile(path.join(process.cwd(),'.agents/skills/my-branding-skill/SKILL.md'),'utf8');const prepared=await createRecord(prepareRequest(feedBrief(source,{...brand,outputPlatforms:brand.brainProfile.platforms.filter((p:any)=>p.enabled).map((p:any)=>p.id)},{voiceRules:voiceRulesPrompt(settings),sourceId:source.post_id}),brand,skill));draftId=prepared.id;
  const result=await generateRecord(prepared.id,0);return NextResponse.json(await client.saveContentDraft(result),{headers:{'Cache-Control':'no-store'}});
  }catch(e){return NextResponse.json({error:e instanceof ContentError?e.message:'生成或保存未完成；沒有自動重試',draftId},{status:e instanceof ContentError?e.status:503});}}

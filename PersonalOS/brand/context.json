@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "owner": "leofongai",
+  "owner": "My Brand",
   "status": "student-source-needs-review",
   "vaultRoot": "../.student-data/brand",
   "canonical": {
@@ -16,7 +16,7 @@
   ],
   "websites": [],
   "outputPlatforms": [
-    "Instagram",
-    "Threads"
+    "Threads",
+    "Instagram"
   ]
 }

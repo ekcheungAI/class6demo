@@ -17,7 +17,7 @@
       "icon": "Newspaper",
       "group": "main",
       "lesson": 5,
-      "implemented": false,
+      "implemented": true,
       "visible": true
     },
     {
@@ -27,7 +27,7 @@
       "icon": "Compass",
       "group": "main",
       "lesson": 5,
-      "implemented": false,
+      "implemented": true,
       "visible": true
     },
     {
@@ -89,6 +89,16 @@
       "lesson": null,
       "implemented": false,
       "visible": false
+    },
+    {
+      "href": "/composer",
+      "label": "Composer",
+      "zh": "排版台",
+      "icon": "LayoutTemplate",
+      "group": "main",
+      "lesson": 6,
+      "implemented": true,
+      "visible": true
     },
     {
       "href": "/queue",

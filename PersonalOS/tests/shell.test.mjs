@@ -41,8 +41,9 @@ const json = (d, options = {}) =>
     status: 200,
     headers: { "content-type": "application/json", ...options },
   });
-test("all 14 original main tabs and 5 development entries retained", () => {
-  assert.equal(features.filter((f) => f.group === "main").length, 14);
+test("all 14 original main tabs, Lesson 6 Composer, and 5 development entries retained", () => {
+  assert.equal(features.filter((f) => f.group === "main").length, 15);
+  assert.equal(getFeature("/composer").lesson, 6);
   assert.equal(features.filter((f) => f.group === "development").length, 5);
   for (const href of [
     "/dashboard",
@@ -261,6 +262,7 @@ test('missing table grants are access denial, not invalid keys or empty data',as
 
 test('removed studios remain in metadata but not the sidebar',()=>{for(const path of ['/slides-studio','/classroom','/video-studio','/guides']){assert.ok(features.some(f=>f.href===path));assert.ok(!visibleFeatures.some(f=>f.href===path||f.href.startsWith(path+'/')));}});
 
-test('source and brain modules all belong to Lesson 5 without unlocking future operations',()=>{for(const href of ['/feed','/inspiration','/voice']){assert.equal(getFeature(href).lesson,5);for(const child of subroutes[href]||[])assert.equal(child.lesson,5);}assert.equal(isImplemented('/feed'),false);assert.equal(isImplemented('/inspiration'),false);assert.equal(getFeature('/queue').lesson,5);});
+test('source and brain modules all belong to Lesson 5 without unlocking future operations',()=>{for(const href of ['/feed','/inspiration','/voice']){assert.equal(getFeature(href).lesson,5);for(const child of subroutes[href]||[])assert.equal(child.lesson,5);}// Lesson 6 opens Feed (settings-backed sources) and Inspiration (搵靈感) as real operations.
+assert.equal(isImplemented('/feed'),true);assert.equal(isImplemented('/inspiration'),true);assert.equal(getFeature('/queue').lesson,5);});
 
-test('Lesson 5 navigation shows the eight agreed entries including Queue while retaining future modules',()=>{assert.deepEqual(visibleFeatures.map(f=>f.href),['/dashboard','/feed','/inspiration','/creator-studio','/queue','/voice','/connections','/settings']);for(const path of ['/newsletter','/queue','/analytics','/autopilot','/skills','/model-costs'])assert.ok(features.some(f=>f.href===path));});
+test('Lesson 6 navigation shows the nine agreed entries including Composer and Queue while retaining future modules',()=>{assert.deepEqual(visibleFeatures.map(f=>f.href),['/dashboard','/feed','/inspiration','/creator-studio','/composer','/queue','/voice','/connections','/settings']);for(const path of ['/newsletter','/queue','/analytics','/autopilot','/skills','/model-costs'])assert.ok(features.some(f=>f.href===path));});
