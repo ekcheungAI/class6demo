@@ -4,13 +4,11 @@
 
 ## 第一幕（搵靈感）
 - Skill：`skills/personalos-research`（已喺項目 ZIP 入面）。Prompt：「裝 `skills/personalos-research`，已有就唔好重裝；完成後話我知實際安裝位置。」
-- 老師派 `CLASS06-API-KEYS.env` → `private-credentials/`；Codex 只合併變數名（`EXA_API_KEY`／`FIRECRAWL_API_KEY`／`TAVILY_API_KEY`／`DEEPSEEK_API_KEY`／`TOPAPIS_API_KEY`），唔顯示值。
+- 老師派 `CLASS06-API-KEYS.env` → `private-credentials/`；Codex 只合併變數名（`EXA_API_KEY`／`FIRECRAWL_API_KEY`／`TAVILY_API_KEY`／`TOPAPIS_API_KEY`），唔顯示值。
 
 ## 第二幕（Rewrite）
 - 模板更新：`git fetch` 老師 upstream 嘅 `lesson-06` tag（老師課前公布）。Prompt：「拉老師 lesson-06 更新到我嘅 branch，唔好覆蓋我自己改過嘅檔；有衝突列出嚟等我。」
-- Rewrite 引擎：**DeepSeek**（`DEEPSEEK_API_KEY`，老師派）。唔使裝嘢——OpenAI 格式兼容，所以只係三行設定：
-  `base_url = https://api.deepseek.com`／`model = deepseek-chat`／`api_key` 讀 env。
-  官方文件 https://api-docs.deepseek.com/zh-cn/ ；行唔通就對返文件，唔好靠記憶改欄位名。
+- Rewrite 引擎：**唔使裝、唔使換。** 你部機而家已經行緊 `deepseek-v4-flash`，經 `TOAPI_API_KEY` 呢條 key。設定喺 `config/course-models.json`，今日唔郁佢。
 - Skill：`humanizer-zh-tw`（可選，第三幕圈套話用）— 位置：TBC（老師課前確認）
 
 ## 第三幕（Connect）

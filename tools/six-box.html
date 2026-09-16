@@ -226,7 +226,7 @@ footer code{font-family:var(--mono);font-size:.94em}
     tikhub:     {n:"TikHub",           k:"API",   g:"IG／YouTube／Reddit 帖、留言、轉錄", c:"按次・第三方轉售，課前對一次文件"},
     youtube:    {n:"YouTube Data API", k:"API",   g:"影片搜尋 ＋ 公開統計（可指定 HK region）", c:"每日免費配額・超額當日停"},
     resend:     {n:"Resend",           k:"API",   g:"寄 email、追開信同點擊", c:"按封・要驗 domain 先寄得出"},
-    topapis:    {n:"TopAPIs",          k:"API",   g:"文字模型、生圖", c:"共用 credits・生成成功 ≠ 保存成功"},
+    topapis:    {n:"TopAPIs",          k:"API",   g:"一條 key 三份工：改寫（deepseek-v4-flash）、打分、生圖", c:"三份工共用同一份 credits・爆一個三個一齊死"},
     supabase:   {n:"Supabase",         k:"API",   g:"Postgres 存卡同狀態、Storage 存圖片影片", k2:"亦有 MCP", c:"免費額度・第五堂已開"},
     vercelcron: {n:"vercel.json cron", k:"API",   g:"定時叫你自己個 endpoint", c:"免費・預設關；「缺少設定 = 關」"},
     webhook:    {n:"Webhook",          k:"API",   g:"對方有事發生就 call 你，唔使你 poll", c:"免費・要驗簽名，唔好信 payload"},
@@ -235,7 +235,6 @@ footer code{font-family:var(--mono);font-size:.94em}
     calmcp:     {n:"Google Calendar",  k:"MCP",   g:"讀日程、搵空檔、開會議", c:"你已連咗"},
     sheets:     {n:"Google Sheets",    k:"API",   g:"當簡單資料庫，人手改得到", c:"免費・schema 一改就爆，要對欄名"},
     codex:      {n:"Codex CLI",        k:"CLI",   g:"讀 AGENTS.md，喺你個 repo 入面寫碼", c:"你已經用緊・每次只問一題"},
-    deepseek:   {n:"DeepSeek",           k:"API",   g:"文字模型：改寫、摘要、打分", c:"新戶口一次性免費額度・按 token 計"},
     brain:      {n:"Ommi Brain",       k:"Skill", g:"你嘅讀者、主題、語氣——判斷同打分靠佢", c:"第五堂已保存"}
   };
 
@@ -272,13 +271,13 @@ footer code{font-family:var(--mono);font-size:.94em}
 
   var ARTIFACTS = [
     {id:"post", kw:["post","帖","social","貼文","content","內容","小紅書","threads","ig","instagram"],
-     label:"一篇用你把聲寫嘅帖", tech:["brain","deepseek","topapis"], newBox:false,
+     label:"一篇用你把聲寫嘅帖", tech:["brain","topapis"], newBox:false,
      tip:"Rewrite 改嘅係講法同角度，事實同數字一個字都唔准郁。"},
     {id:"outreach", kw:["outreach","dm","私訊","聯絡","cold","pitch","接洽","合作","邀請"],
-     label:"一封寫畀特定一個人嘅訊息", tech:["brain","deepseek","resend","gmailmcp"], newBox:false,
+     label:"一封寫畀特定一個人嘅訊息", tech:["brain","topapis","resend","gmailmcp"], newBox:false,
      tip:"Outreach 最貴嗰句係「點解係你」。冇呢句，個系統只係幫你更快寄垃圾。"},
     {id:"report", kw:["report","報告","summary","摘要","總結","dashboard","數據","分析"],
-     label:"一份讀完就知做乜嘅摘要", tech:["brain","deepseek","notionmcp","sheets"], newBox:false,
+     label:"一份讀完就知做乜嘅摘要", tech:["brain","topapis","notionmcp","sheets"], newBox:false,
      tip:"報告嘅成功定義唔係「生成咗」，係「讀完之後你改咗一個決定」。"},
     {id:"media", kw:["圖","image","poster","海報","片","video","短片","reel","shorts"],
      label:"帶品牌嘅圖／片", tech:["topapis","supabase"], newBox:false,

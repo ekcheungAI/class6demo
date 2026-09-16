@@ -22,7 +22,7 @@
 
 ## 老師派嘅 key
 
-`CLASS06-API-KEYS.env`（`EXA_API_KEY`／`FIRECRAWL_API_KEY`／`TAVILY_API_KEY`／`DEEPSEEK_API_KEY`／`TOPAPIS_API_KEY`）放 `private-credentials/`。Codex 只會合併變數名入 env，唔會顯示值。唔貼 chat、群組、截圖；唔入 Git。
+`CLASS06-API-KEYS.env`（`EXA_API_KEY`／`FIRECRAWL_API_KEY`／`TAVILY_API_KEY`／`TOPAPIS_API_KEY`）放 `private-credentials/`。Codex 只會合併變數名入 env，唔會顯示值。唔貼 chat、群組、截圖；唔入 Git。
 
 ## 卡住
 
