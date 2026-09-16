@@ -79,6 +79,21 @@ App secret **唔係出帖需要**——出帖淨係要 user token ＋ user id。
 3. 叫 Codex 去 Upload-Post 官網搵 API 文件，**讀完先講返用邊個 endpoint、邊個認證 header**，
    你 OK 咗佢先寫 code。呢個就係今日要養成嘅習慣：**唔好靠記憶改欄位名，對返文件。**
 
+**已核實（2026-09-16，對住 `https://docs.upload-post.com/openapi.json`）：**
+
+```
+base           https://api.upload-post.com/api
+認證 header    Authorization: Apikey <UPLOAD_POST_API_KEY>      ← 唔係 Bearer
+讀 profile     GET  /uploadposts/users                          → { profiles:[{username, social_accounts:{threads:{handle…}, instagram:"" …}}] }
+出文字帖       POST /upload_text      multipart: user, platform[], title
+出圖           POST /upload_photos    multipart: user, platform[], photos[], title
+                 → 同步：{ success, results:{ <platform>:{ success, url, post_id } } }
+                 → 非同步（async_upload=true）：{ request_id }
+查狀態         GET  /uploadposts/status?request_id=…            → { status: pending|in_progress|completed, results:[…] }
+```
+
+`social_accounts` 入面某平台係空字串 ＝ 個位有、未連。Instagram 一定要行 `/upload_photos`。
+
 呢份合約只鎖住**行為**，唔鎖 endpoint：
 
 - 送出之前先讀一次已連帳戶清單，確認目標平台狀態係「已連」——**未連就唔好送**。

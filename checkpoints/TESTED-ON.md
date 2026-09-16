@@ -1,0 +1,6 @@
+# TESTED-ON
+
+| 日期 | 邊部機 | 結果 |
+|---|---|---|
+| 2026-09-16 | Elvin 部 Mac（Claude Code），乾淨 clone `a194869` → `l6-release`，Supabase `personal-os`（asbhpmkpcvthkreyfnlk，新 auth user `l6-sandbox@…`） | `npm test` 104/104 · `next build` 過 · Class 5 baseline（Brain → RSS → Rewrite 15s → Queue）通 · Act 1 DEMO 五張卡 + 標今日來源 + high-risk 卡拒絕 · Act 2 voice rules 入 Rewrite（R1 開場先講讀者問題 ✓，facts_check 三行事實冇變）· Act 4 Composer 38s 出三張卡三個 hash · dry-run → 批準 → 改一個字批準失效 · Act 5 mock Threads 出街三個 ID 分開、重覆發被擋、UNKNOWN 唔重發、再查一次；mock Upload-Post IG 冇圖拒絕、有圖出到 · Act 6 三欄、schedule/unschedule、未批準卡 runner 唔發、kill switch 停、cap 1 擋第二篇、加自訂 RSS 抓到 6 篇 |
+| 2026-09-16 | 真 key（@88cashback 長期 token · Upload-Post profile `88cashbackhk`） | `/connections`：token 有 publish scope、到期 2026-11-15，**user id 由 token 讀返係 26359918660338092（run sheet 舊數字錯）**；Upload-Post `Authorization: Apikey`，profile 連咗 x/threads/instagram · 搵靈感 LIVE 58s：Exa 1 + Firecrawl scrape 3 + qwen 打分 4.3k tokens，五張卡 · Composer LIVE 來源出卡，facts_check 標紅一行模型加咗嘅句 · **threads_direct 真出街**：submitted 18113505509060734 → published 17979044517065132 → permalink ✓ · **upload_post 真出街**：request_id → post_id 18124887220848393 → permalink ✓ · 兩篇都**刪唔到**：token 冇 `threads_delete`，Upload-Post 亦冇申請 → 要喺 app 手動刪 |
