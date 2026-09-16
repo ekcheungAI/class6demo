@@ -1,0 +1,11 @@
+{
+  "mode": "DEMO",
+  "note": "A submitted_id that no verify call will ever resolve. Use it to demonstrate UNKNOWN. Never re-submit from this file.",
+  "card_id": "demo-card-0001",
+  "provider": "threads_direct",
+  "submitted_id": "1791…(stale)",
+  "published_id": null,
+  "public_url": null,
+  "publish_status": "unknown",
+  "next_action": "verify again with the same submitted_id; do not submit"
+}

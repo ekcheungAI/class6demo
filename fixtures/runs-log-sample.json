@@ -1,0 +1,8 @@
+{
+  "mode": "DEMO",
+  "runs": [
+    { "started_at": "2026-09-16T09:00:03+08:00", "trigger": "cron", "status": "ok", "sources_found": 2, "drafts_made": 1, "cards_published": 1, "cards_unknown": 0, "credits_used": 7, "log": ["search 5 results (2 credits)", "scraped 3 pages (3 credits)", "persona kept 1", "rewrite (2 credits)", "published threads card a1c2…"] },
+    { "started_at": "2026-09-16T14:10:41+08:00", "trigger": "manual", "status": "skipped", "sources_found": 0, "drafts_made": 0, "cards_published": 0, "cards_unknown": 0, "credits_used": 0, "log": ["daily cap 1 reached; nothing published"] },
+    { "started_at": "2026-09-17T09:00:02+08:00", "trigger": "cron", "status": "stopped", "sources_found": 0, "drafts_made": 0, "cards_published": 0, "cards_unknown": 0, "credits_used": 0, "log": ["stopped by kill switch"] }
+  ]
+}

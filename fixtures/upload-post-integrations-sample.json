@@ -1,0 +1,10 @@
+{
+  "mode": "DEMO",
+  "note": "Shape of a connected-platforms list from a multi-platform publish hub. Not real. Verify the real field names against the provider's docs before class.",
+  "checked_at": "2026-09-15T09:06:00+08:00",
+  "integrations": [
+    { "id": "int_demo_threads", "platform": "threads", "name": "demo_student", "status": "connected" },
+    { "id": "int_demo_instagram", "platform": "instagram", "name": "demo_student", "status": "connected" },
+    { "id": "int_demo_x", "platform": "x", "name": null, "status": "not_connected" }
+  ]
+}

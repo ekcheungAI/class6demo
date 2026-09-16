@@ -1,0 +1,22 @@
+# 真 key 永遠唔入呢個 repo。只有 .env.example（變數名，冇值）可以入。
+.env
+.env.*
+!.env.example
+private-credentials/
+*CLASS06-API-KEYS.env
+!*CLASS06-API-KEYS.env.example
+*.pem
+*.key
+secrets*
+credentials*
+
+# 學生自己部 app
+node_modules/
+.next/
+.vercel/
+dist/
+build/
+
+.DS_Store
+Thumbs.db
+*.log

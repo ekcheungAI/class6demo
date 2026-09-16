@@ -1,0 +1,12 @@
+{
+  "mode": "DEMO",
+  "note": "Five example inspiration cards, one per source role plus one high-risk claim. All fictional. Use when a key is missing or the API is rate-limited; the UI must show DEMO.",
+  "query": "小店 用 AI 出 Threads 帖 值唔值得 · tbs:qdr:w",
+  "cards": [
+    { "card_id": "demo-i-01", "source_id": "S-06", "title": "一個新嘅 PDF 摘要工具（教學示例）", "url": "https://example.invalid/pdf-tool", "published_at": "2026-09-10T09:00:00+08:00", "fetched_at": "2026-09-15T09:00:00+08:00", "source_role": "primary", "confidence": "medium", "claim_risk": "low", "why_now": "上月推出，免費額度今個月仍有效", "persona_score": 0.8, "persona_reason": "小店今日就可以試一份 PDF，唔使識技術", "collector": "firecrawl", "credits_used": 1 },
+    { "card_id": "demo-i-02", "source_id": "S-07", "title": "第三方測試：三款摘要工具比較（教學示例）", "url": "https://example.invalid/compare", "published_at": "2026-09-12T14:00:00+08:00", "fetched_at": "2026-09-15T09:00:00+08:00", "source_role": "independent", "confidence": "medium", "claim_risk": "medium", "why_now": "比較咗上星期先出嘅版本", "persona_score": 0.6, "persona_reason": "有比較先揀得到，但讀者未必想睇三款", "collector": "firecrawl", "credits_used": 1 },
+    { "card_id": "demo-i-03", "source_id": "S-08", "title": "X 帖：「呢個工具改變咗我嘅工作流」（教學示例）", "url": "https://example.invalid/x/123", "published_at": "2026-09-14T20:00:00+08:00", "fetched_at": "2026-09-15T09:00:00+08:00", "source_role": "signal", "confidence": "low", "claim_risk": "low", "why_now": "昨晚多人討論", "persona_score": 0.5, "persona_reason": "可以做「有人討論緊」嘅角度，唔可以做事實", "collector": "exa", "credits_used": 0 },
+    { "card_id": "demo-i-04", "source_id": "S-09", "title": "廠商新聞稿：「業界最快」（教學示例）", "url": "https://example.invalid/press", "published_at": "2026-09-13T10:00:00+08:00", "fetched_at": "2026-09-15T09:00:00+08:00", "source_role": "marketing", "confidence": "low", "claim_risk": "medium", "why_now": "新聞稿今週發", "persona_score": 0.3, "persona_reason": "「最快」未經核實；讀者唔會因為呢句改變決定", "collector": "exa", "credits_used": 0 },
+    { "card_id": "demo-i-05", "source_id": "S-10", "title": "傳聞：某公司裁員因為 AI（教學示例）", "url": "https://example.invalid/rumour", "published_at": null, "fetched_at": "2026-09-15T09:00:00+08:00", "source_role": "signal", "confidence": "low", "claim_risk": "high", "why_now": "未知——冇發布時間", "persona_score": 0.2, "persona_reason": "具名公司＋裁員＝high risk；冇 primary 唔可以入 Rewrite", "collector": "exa", "credits_used": 0 }
+  ]
+}

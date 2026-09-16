@@ -1,0 +1,10 @@
+{
+  "mode": "DEMO",
+  "note": "Shape of an identity read. Not a real account. No token anywhere in this file.",
+  "provider": "threads_direct",
+  "account": { "id": "1784…(masked)", "username": "demo_student" },
+  "checked_at": "2026-09-15T09:05:00+08:00",
+  "scopes_verified": ["threads_basic"],
+  "scopes_unknown": ["threads_content_publish"],
+  "verdict": "identity_ok_publish_unverified"
+}

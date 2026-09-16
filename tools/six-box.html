@@ -1,0 +1,648 @@
+<title>六格拆解</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#f4f2ef; --panel:#fff; --panel2:#faf9f7; --ink:#15121c; --dim:#6a6478; --hair:#dedad4;
+  --violet:#5b3ecc; --violet-soft:#efeafc; --violet-line:#c9bcf5;
+  --lime-ink:#4a5800; --lime-bg:#e7f4b0; --lime-line:#c3dd5f;
+  --amber-ink:#8a4f06; --amber-bg:#fbe9cd; --amber-line:#efc183;
+  --red-ink:#a12036; --red-bg:#fbdee3; --red-line:#eda3b0;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Noto Sans TC",-apple-system,BlinkMacSystemFont,"PingFang HK","Microsoft JhengHei",sans-serif;
+  --scale:1;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0b0a10; --panel:#17161f; --panel2:#1e1c28; --ink:#f3f1fa; --dim:#a29bb4; --hair:#302d3d;
+  --violet:#b6a0ff; --violet-soft:#241f3c; --violet-line:#4a3f7a;
+  --lime-ink:#c8ff00; --lime-bg:#222c08; --lime-line:#4e5f14;
+  --amber-ink:#ffb870; --amber-bg:#36260f; --amber-line:#6d4d1f;
+  --red-ink:#ff8e9e; --red-bg:#38151d; --red-line:#71303c;
+}}
+:root[data-theme="dark"]{
+  --ground:#0b0a10; --panel:#17161f; --panel2:#1e1c28; --ink:#f3f1fa; --dim:#a29bb4; --hair:#302d3d;
+  --violet:#b6a0ff; --violet-soft:#241f3c; --violet-line:#4a3f7a;
+  --lime-ink:#c8ff00; --lime-bg:#222c08; --lime-line:#4e5f14;
+  --amber-ink:#ffb870; --amber-bg:#36260f; --amber-line:#6d4d1f;
+  --red-ink:#ff8e9e; --red-bg:#38151d; --red-line:#71303c;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);
+  font-size:calc(15px * var(--scale));line-height:1.6;margin:0;padding-inline:16px}
+body.big{--scale:1.28}
+.wrap{max-width:1140px;margin:0 auto;padding-block:34px 90px}
+
+h1{font-size:calc(30px * var(--scale));font-weight:900;letter-spacing:-.02em;margin:0 0 4px;line-height:1.12}
+.sub{color:var(--dim);margin:0 0 4px;max-width:62ch}
+.spine{font-weight:700;color:var(--violet);margin:0 0 22px}
+
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tb{font:600 calc(12px * var(--scale))/1 var(--mono);letter-spacing:.04em;padding:8px 11px;border-radius:3px;
+  cursor:pointer;border:1px solid var(--hair);background:var(--panel);color:var(--dim)}
+.tb[aria-pressed="true"]{background:var(--violet);border-color:var(--violet);color:var(--ground)}
+.tb:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
+.box{background:var(--panel);border:1px solid var(--hair);border-radius:6px;padding:16px}
+label.lab{display:block;font:600 calc(11px * var(--scale))/1 var(--mono);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+textarea{width:100%;min-height:78px;resize:vertical;font-family:var(--sans);
+  font-size:calc(17px * var(--scale));line-height:1.5;color:var(--ink);background:var(--panel2);
+  border:1px solid var(--hair);border-radius:4px;padding:11px 13px}
+.egs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px}
+.eg{font:500 calc(12px * var(--scale))/1.3 var(--sans);text-align:left;padding:7px 10px;border-radius:3px;cursor:pointer;
+  border:1px dashed var(--violet-line);background:transparent;color:var(--violet)}
+.go{font:700 calc(15px * var(--scale))/1 var(--sans);padding:13px 24px;border:none;border-radius:4px;
+  cursor:pointer;background:var(--violet);color:var(--ground)}
+.go:disabled{opacity:.45;cursor:default}
+
+#out[hidden]{display:none}
+section{margin-top:34px}
+h2{font-size:calc(13px * var(--scale));font-weight:700;font-family:var(--mono);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 12px;padding-bottom:7px;border-bottom:1px solid var(--hair)}
+
+.reveal{background:var(--lime-bg);border:1px solid var(--lime-line);border-radius:6px;padding:20px 22px}
+.reveal .big-n{font:800 calc(44px * var(--scale))/1 var(--mono);color:var(--lime-ink);font-variant-numeric:tabular-nums}
+.reveal p{margin:6px 0 0;font-size:calc(16px * var(--scale));font-weight:700;color:var(--lime-ink)}
+.reveal small{display:block;margin-top:8px;font-size:calc(13px * var(--scale));font-weight:400;color:var(--lime-ink);opacity:.82}
+
+.grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:920px){.grid6{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.grid6{grid-template-columns:1fr}}
+.cell{background:var(--panel);border:1px solid var(--hair);border-radius:6px;padding:14px;
+  display:flex;flex-direction:column;gap:7px}
+.cell.new{border-color:var(--amber-line);background:var(--amber-bg)}
+.cell-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cell-n{font:700 calc(11px * var(--scale))/1 var(--mono);letter-spacing:.08em;color:var(--dim)}
+.chip{font:700 calc(10px * var(--scale))/1 var(--mono);letter-spacing:.07em;padding:4px 7px;border-radius:2px;white-space:nowrap}
+.chip.keep{background:var(--violet-soft);color:var(--violet)}
+.chip.new{background:var(--amber-ink);color:var(--ground)}
+.cell h3{margin:0;font-size:calc(19px * var(--scale));font-weight:700;letter-spacing:-.01em}
+.cell .q{margin:0;font-size:calc(13px * var(--scale));color:var(--dim)}
+.cell .ans{margin:0;font-size:calc(14.5px * var(--scale));font-weight:500}
+.cell .tip{margin:0;font-size:calc(12.5px * var(--scale));color:var(--dim);
+  border-left:2px solid var(--violet-line);padding-left:9px}
+
+table{width:100%;border-collapse:collapse;font-size:calc(13.5px * var(--scale))}
+.scroll{overflow-x:auto;border:1px solid var(--hair);border-radius:6px;background:var(--panel)}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--hair);vertical-align:top}
+th{font:600 calc(11px * var(--scale))/1.4 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td code,.kind{font:600 calc(11.5px * var(--scale))/1.5 var(--mono)}
+.kind{padding:3px 6px;border-radius:2px;white-space:nowrap}
+.kind.API{background:var(--violet-soft);color:var(--violet)}
+.kind.MCP{background:var(--lime-bg);color:var(--lime-ink)}
+.kind.CLI{background:var(--amber-bg);color:var(--amber-ink)}
+.kind.Skill{background:var(--panel2);color:var(--dim)}
+.warn{color:var(--amber-ink);font-weight:600}
+
+ol.flow{list-style:none;counter-reset:f;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+ol.flow li{counter-increment:f;background:var(--panel);border:1px solid var(--hair);border-radius:5px;
+  padding:12px 14px 12px 50px;position:relative}
+ol.flow li::before{content:counter(f);position:absolute;left:14px;top:12px;
+  font:700 calc(13px * var(--scale))/1 var(--mono);color:var(--violet);
+  background:var(--violet-soft);padding:6px 8px;border-radius:3px}
+ol.flow b{display:block;font-size:calc(15.5px * var(--scale))}
+ol.flow span{font-size:calc(13px * var(--scale));color:var(--dim)}
+
+.risks{display:flex;flex-direction:column;gap:8px}
+.risk{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:baseline;
+  background:var(--red-bg);border:1px solid var(--red-line);border-radius:5px;padding:11px 13px}
+.risk b{font:700 calc(11.5px * var(--scale))/1.4 var(--mono);letter-spacing:.05em;color:var(--red-ink)}
+.risk span{font-size:calc(13.5px * var(--scale))}
+
+.pr{background:var(--panel);border:1px solid var(--hair);border-radius:6px;padding:14px;margin-bottom:10px}
+.pr-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.pr-h b{font:600 calc(11px * var(--scale))/1 var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+.count{font:600 calc(11px * var(--scale))/1 var(--mono);padding:4px 7px;border-radius:2px}
+.count.ok{background:var(--lime-bg);color:var(--lime-ink)}
+.count.over{background:var(--amber-bg);color:var(--amber-ink)}
+.pr pre{margin:0;white-space:pre-wrap;word-break:break-word;background:var(--panel2);
+  border:1px solid var(--hair);border-radius:4px;padding:12px;
+  font:500 calc(14px * var(--scale))/1.65 var(--sans);color:var(--ink)}
+.pr .ev{margin:9px 0 0;font-size:calc(13px * var(--scale));color:var(--dim)}
+.pr .ev b{font-family:var(--mono);font-size:calc(10.5px * var(--scale));letter-spacing:.06em;
+  text-transform:uppercase;color:var(--dim);display:block;margin-bottom:2px}
+
+.fill{background:var(--violet-soft);border:1px solid var(--violet-line);border-radius:6px;padding:16px;margin-top:12px}
+.fill-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.fill button{font:700 calc(13px * var(--scale))/1 var(--sans);padding:10px 16px;border:none;border-radius:4px;
+  cursor:pointer;background:var(--violet);color:var(--ground)}
+.fill button.ghost{background:transparent;color:var(--violet);border:1px solid var(--violet-line)}
+.fill p.note{margin:0;font-size:calc(12.5px * var(--scale));color:var(--dim)}
+#fillOut{white-space:pre-wrap;font-size:calc(14.5px * var(--scale));margin:0}
+#fillOut:empty{display:none}
+
+footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--hair);color:var(--dim);
+  font-size:calc(12.5px * var(--scale))}
+footer code{font-family:var(--mono);font-size:.94em}
+@media (max-width:620px){.risk{grid-template-columns:1fr;gap:4px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <h1>六格拆解</h1>
+  <p class="sub">任何一句「我係乜人，我想部機幫我做乜」，拆成六格：睇乜、點判斷、出乜、去邊、幾時做、邊度會炸。每格畀你 tech、user flow、要留意嘅位，同一條可以即刻貼嘅 prompt。</p>
+  <p class="spine">一、二、四格逐盤生意唔同；三、五、六格每次都一樣。</p>
+
+  <div class="toolbar">
+    <button class="tb" id="bigBtn" aria-pressed="false">投影大字</button>
+    <button class="tb" id="themeBtn" aria-pressed="false">深色</button>
+  </div>
+
+  <div class="box">
+    <label class="lab" for="idea">一句講你想部機幫你做乜</label>
+    <textarea id="idea" placeholder="我係做 marketing 嘅，做咗十年，想有部機幫我自動出社交帖。"></textarea>
+    <div class="egs" id="egs"></div>
+    <button class="go" id="go">拆解</button>
+  </div>
+
+  <div id="out" hidden>
+    <section>
+      <div class="reveal">
+        <div class="big-n" id="newCount">—</div>
+        <p id="revealLine"></p>
+        <small id="revealSub"></small>
+      </div>
+    </section>
+
+    <section>
+      <h2>六格</h2>
+      <div class="grid6" id="cells"></div>
+    </section>
+
+    <section>
+      <h2>要用嘅 tech</h2>
+      <div class="scroll"><table>
+        <thead><tr><th>格</th><th>用邊個</th><th>類</th><th>畀你乜</th><th>計錢 ／ 要留意</th></tr></thead>
+        <tbody id="techBody"></tbody>
+      </table></div>
+      <p class="sub" style="margin-top:10px;font-size:calc(12.5px * var(--scale))">呢啲服務會改 request shape 同 rate limit。實作前讀返官方文件，唔好靠記憶改欄位名。</p>
+    </section>
+
+    <section>
+      <h2>User flow</h2>
+      <ol class="flow" id="flow"></ol>
+    </section>
+
+    <section>
+      <h2>邊度會炸（五條排除法則）</h2>
+      <div class="risks" id="risks"></div>
+    </section>
+
+    <section>
+      <h2>三條 prompt（house spec：50–100 字、零路徑、一定有停止句）</h2>
+      <div id="prompts"></div>
+      <div class="fill">
+        <div class="fill-head">
+          <button id="fillBtn" hidden>叫 Claude 補肉</button>
+          <button id="stopBtn" class="ghost" hidden>停</button>
+          <p class="note" id="fillNote">上面六格同 prompt 係規則跑出嚟嘅，唔使帳戶、唔使 key、離線一樣行。</p>
+        </div>
+        <p id="fillOut"></p>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p><b>點解得六格。</b> 每個 PersonalOS 都係同一部機：收料 → 判斷 → 產出 → 落地 → 排程 → 留人手。轉行業只係轉第一格同第四格。你喺第五、六堂起嘅嘢，就係其餘四格。</p>
+    <p><code>sample</code> 補肉用緊你自己個 Claude 帳戶，第一次會問你準唔準。唔準、或者離線，六格同 tech 照出。</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- registries: curated, auditable, not invented at runtime ---------- */
+
+  var TECH = {
+    exa:        {n:"Exa",              k:"API",   g:"語意搜尋：用「讀者要決定嘅事」做 query，搵講緊同一件事嘅頁", c:"按次・每輪 1 次 search、≤8 結果"},
+    firecrawl:  {n:"Firecrawl",        k:"API",   g:"/v2/scrape → 乾淨 markdown ＋ published_at", c:"2 credits／10 結果 + 1／頁・每輪 scrape ≤3 頁"},
+    tavily:     {n:"Tavily",           k:"API",   g:"第二個獨立來源，核對 claim_risk medium／high", c:"按次・每輪 ≤2 次"},
+    research:   {n:"personalos-research", k:"Skill", g:"包住 Exa→Firecrawl→Tavily 一條路，有硬上限同 fallback", c:"免費・第五堂已裝"},
+    rss:        {n:"RSS / Atom",       k:"API",   g:"對方肯出 feed 就係最平最穩嘅收料方法", c:"免費・但唔係個個站有"},
+    threads:    {n:"Threads Graph",    k:"API",   g:"讀身份、建 container、發布、查結果", c:"免費（平台限額）・submitted ≠ published"},
+    uploadpost: {n:"Upload-Post",      k:"API",   g:"一條路出多個平台", c:"訂閱・Instagram 只走呢條，而且一定要有圖"},
+    tikhub:     {n:"TikHub",           k:"API",   g:"IG／YouTube／Reddit 帖、留言、轉錄", c:"按次・第三方轉售，課前對一次文件"},
+    youtube:    {n:"YouTube Data API", k:"API",   g:"影片搜尋 ＋ 公開統計（可指定 HK region）", c:"每日免費配額・超額當日停"},
+    resend:     {n:"Resend",           k:"API",   g:"寄 email、追開信同點擊", c:"按封・要驗 domain 先寄得出"},
+    topapis:    {n:"TopAPIs",          k:"API",   g:"文字模型、生圖", c:"共用 credits・生成成功 ≠ 保存成功"},
+    supabase:   {n:"Supabase",         k:"API",   g:"Postgres 存卡同狀態、Storage 存圖片影片", k2:"亦有 MCP", c:"免費額度・第五堂已開"},
+    vercelcron: {n:"vercel.json cron", k:"API",   g:"定時叫你自己個 endpoint", c:"免費・預設關；「缺少設定 = 關」"},
+    webhook:    {n:"Webhook",          k:"API",   g:"對方有事發生就 call 你，唔使你 poll", c:"免費・要驗簽名，唔好信 payload"},
+    notionmcp:  {n:"Notion",           k:"MCP",   g:"讀寫 Notion 頁同 database，唔使自己砌 API", c:"你已連咗・用你自己嘅權限"},
+    gmailmcp:   {n:"Gmail",            k:"MCP",   g:"讀 thread、出草稿、寄信", c:"你已連咗・草稿同寄出要分開做"},
+    calmcp:     {n:"Google Calendar",  k:"MCP",   g:"讀日程、搵空檔、開會議", c:"你已連咗"},
+    sheets:     {n:"Google Sheets",    k:"API",   g:"當簡單資料庫，人手改得到", c:"免費・schema 一改就爆，要對欄名"},
+    codex:      {n:"Codex CLI",        k:"CLI",   g:"讀 AGENTS.md，喺你個 repo 入面寫碼", c:"你已經用緊・每次只問一題"},
+    deepseek:   {n:"DeepSeek",           k:"API",   g:"文字模型：改寫、摘要、打分", c:"新戶口一次性免費額度・按 token 計"},
+    brain:      {n:"Ommi Brain",       k:"Skill", g:"你嘅讀者、主題、語氣——判斷同打分靠佢", c:"第五堂已保存"}
+  };
+
+  var BOXES = [
+    {id:"signal",  n:"1", t:"睇乜",     q:"你要監察咩？點樣攞到？"},
+    {id:"judge",   n:"2", t:"點判斷",   q:"乜嘢先算值得你出手？"},
+    {id:"artifact",n:"3", t:"出乜",     q:"最後產出係咩形態？"},
+    {id:"dest",    n:"4", t:"去邊",     q:"邊度落地？"},
+    {id:"trigger", n:"5", t:"幾時做",   q:"人撳？定時？事件觸發？"},
+    {id:"risk",    n:"6", t:"邊度會炸", q:"邊步唔可以自動？"}
+  ];
+
+  /* signal patterns: what the person watches */
+  var SIGNALS = [
+    {id:"creator", kw:["artist","musician","樂手","歌手","kol","creator","influencer","網紅","樂隊","band","作品","candidate","人選","名單"],
+     label:"特定人物／單位嘅新動作", tech:["tikhub","youtube","exa","firecrawl"], newBox:true,
+     tip:"跟人唔同跟題目：要有一張你自己嘅名單，同一條「上次睇到邊」嘅水印，唔係每次重頭掃。"},
+    {id:"competitor", kw:["competitor","對手","同行","價錢","price","餐牌","menu","上架","listing","樓盤","盤","股"],
+     label:"對手／市場嘅變動", tech:["firecrawl","exa","rss"], newBox:true,
+     tip:"存低上一次嘅內容 hash，只有真係變咗先出卡——唔係每日出一張「冇嘢變」。"},
+    {id:"mention", kw:["mention","提起","評論","review","留言","comment","口碑","客戶反饋","投訴"],
+     label:"你／你品牌被人提起", tech:["exa","tavily","tikhub"], newBox:true,
+     tip:"社交帖永遠係 signal，唔係證據。要引用事實，去返原文。"},
+    {id:"inbox", kw:["inbox","收信","郵件","查詢","enquiry","表單","客戶嚟信","入嚟嘅信"],
+     label:"入到嚟嘅信同查詢", tech:["gmailmcp","webhook"], newBox:true,
+     tip:"讀同覆要分兩步。先出草稿，你睇完先寄——寄咗係不可逆。"},
+    {id:"schedule", kw:["日程","行程","calendar","會議","meeting","deadline","跟進","follow up","followup"],
+     label:"日程同要跟進嘅嘢", tech:["calmcp","notionmcp"], newBox:true,
+     tip:"日程係事實，唔使核實；但「跟進咗未」係狀態，要有個地方寫低。"},
+    {id:"topic", kw:["news","新聞","題目","topic","趨勢","trend","行業","研究","資訊"],
+     label:"一個題目嘅新報道", tech:["research","exa","firecrawl","tavily"], newBox:false,
+     tip:"query ＝ 讀者今個星期要決定嘅事 ＋ 範圍詞 ＋ 時間窗。收窄一格，相關度升一級，credits 用少一半。"}
+  ];
+
+  var ARTIFACTS = [
+    {id:"post", kw:["post","帖","social","貼文","content","內容","小紅書","threads","ig","instagram"],
+     label:"一篇用你把聲寫嘅帖", tech:["brain","deepseek","topapis"], newBox:false,
+     tip:"Rewrite 改嘅係講法同角度，事實同數字一個字都唔准郁。"},
+    {id:"outreach", kw:["outreach","dm","私訊","聯絡","cold","pitch","接洽","合作","邀請"],
+     label:"一封寫畀特定一個人嘅訊息", tech:["brain","deepseek","resend","gmailmcp"], newBox:false,
+     tip:"Outreach 最貴嗰句係「點解係你」。冇呢句，個系統只係幫你更快寄垃圾。"},
+    {id:"report", kw:["report","報告","summary","摘要","總結","dashboard","數據","分析"],
+     label:"一份讀完就知做乜嘅摘要", tech:["brain","deepseek","notionmcp","sheets"], newBox:false,
+     tip:"報告嘅成功定義唔係「生成咗」，係「讀完之後你改咗一個決定」。"},
+    {id:"media", kw:["圖","image","poster","海報","片","video","短片","reel","shorts"],
+     label:"帶品牌嘅圖／片", tech:["topapis","supabase"], newBox:false,
+     tip:"生成成功 ≠ 保存成功。要 Storage 讀返到、附到卡上，先算數。"}
+  ];
+
+  var DESTS = [
+    {id:"threads", kw:["threads"], label:"Threads", tech:["threads","uploadpost"], newBox:false,
+     tip:"兩條路：自己 token 直接發，或者經 Upload-Post。兩個都設定咗就要揀一條，唔准兩條一齊。"},
+    {id:"ig", kw:["instagram","ig","小紅書","xhs"], label:"Instagram", tech:["uploadpost"], newBox:false,
+     tip:"Instagram 只走 Upload-Post，而且一定要有圖。冇圖就停喺 draft，UI 要講明原因。"},
+    {id:"email", kw:["email","mail","郵件","newsletter","電郵","寄"], label:"Email／Newsletter", tech:["resend","gmailmcp"], newBox:true,
+     tip:"寄出係不可逆。永遠做到「已批準」就停，由人撳最後嗰下。"},
+    {id:"notion", kw:["notion","筆記","知識庫","database"], label:"Notion", tech:["notionmcp"], newBox:true,
+     tip:"寫入前先讀返個 database 嘅欄位，唔好靠記憶砌 property 名。"},
+    {id:"sheet", kw:["sheet","excel","試算","表格","csv"], label:"Google Sheet", tech:["sheets"], newBox:true,
+     tip:"寫之前對一次欄名；schema 唔同就掟錯，唔好靜靜雞寫落錯欄。"},
+    {id:"internal", kw:["dashboard","內部","自己睇","面板","清單","shortlist"], label:"只喺自己個面板", tech:["supabase"], newBox:false,
+     tip:"唔出街就冇不可逆風險——呢個係最抵做嘅第一版。"}
+  ];
+
+  var TRIGGERS = [
+    {id:"manual", kw:["撳","手動","manual","on demand","想用先"], label:"人撳一下先跑", tech:[],
+     tip:"第一版永遠係呢個。手動未證明有效，schedule 只會令錯誤準時重複。"},
+    {id:"cron", kw:["每日","daily","每朝","每週","weekly","定時","自動","schedule","排程","automate"],
+     label:"定時跑（cron）", tech:["vercelcron"],
+     tip:"三樣嘢缺一不可：一個上限、一個 kill switch、一行 log。「缺少設定 = 關」。"},
+    {id:"event", kw:["一有","即刻","實時","realtime","webhook","觸發","收到就"], label:"事件一發生就跑", tech:["webhook"],
+     tip:"Webhook 要驗簽名同去重；同一個事件送兩次係常態，唔係例外。"}
+  ];
+
+  var ROLES = [
+    {kw:["marketer","marketing","市場","營銷","品牌","brand"], n:"marketer", signal:"topic", artifact:"post", dest:"threads"},
+    {kw:["musician","music","樂手","歌手","音樂","band","樂隊","製作人","producer"], n:"musician", signal:"creator", artifact:"outreach", dest:"email"},
+    {kw:["teacher","導師","老師","教","course","培訓","講師"], n:"educator", signal:"topic", artifact:"post", dest:"threads"},
+    {kw:["shop","店","餐廳","restaurant","零售","retail","小店","電商","ecommerce"], n:"shop owner", signal:"competitor", artifact:"post", dest:"ig"},
+    {kw:["consultant","顧問","freelance","自由","接案","agency"], n:"consultant", signal:"topic", artifact:"outreach", dest:"email"},
+    {kw:["recruiter","招聘","hr","獵頭","人事"], n:"recruiter", signal:"creator", artifact:"outreach", dest:"email"},
+    {kw:["agent","地產","經紀","樓","property"], n:"property agent", signal:"competitor", artifact:"report", dest:"internal"},
+    {kw:["developer","工程","程式","engineer","coder","dev"], n:"developer", signal:"topic", artifact:"report", dest:"notion"},
+    {kw:["writer","作者","寫作","記者","編輯","journalist"], n:"writer", signal:"topic", artifact:"post", dest:"threads"}
+  ];
+
+  var RISK_RULES = [
+    {id:"cred", n:"憑證", test:function(s){return s.dest.id!=="internal";},
+     say:function(s){return "出去" + s.dest.label + "要一條你自己嘅 key。key 只住 server env，唔顯示、唔入 Git、唔貼 chat。"}},
+    {id:"cost", n:"成本", test:function(s){return s.signalTech.indexOf("firecrawl")>=0 || s.signalTech.indexOf("tikhub")>=0 || s.artifact.id==="media";},
+     say:function(s){return "呢條路每跑一次都計錢。每輪寫死上限，超額即停，log 寫低用咗幾多。";}},
+    {id:"wait", n:"等待", test:function(s){return s.artifact.id==="media";},
+     say:function(){return "生圖生片要等，等唔到就唔好喺班房／高峰期一齊撳。先用 fixture 行通條路。";}},
+    {id:"irrev", n:"不可逆", test:function(s){return s.dest.id!=="internal";},
+     say:function(s){return "出咗去" + s.dest.label + "收唔返。做到「已批準」就停，最後嗰下留返俾人。"}},
+    {id:"variance", n:"高變化", test:function(s){return true;},
+     say:function(s){return "「" + s.signal.label + "」每次攞到嘅嘢都唔同。冇結果係一次正常嘅 run——log `no_new_sources`，唔好硬造。"}}
+  ];
+
+  /* ---------- engine ---------- */
+
+  function pick(list, text, fallbackId) {
+    var best = null, bestHits = 0;
+    for (var i = 0; i < list.length; i++) {
+      var hits = 0;
+      for (var j = 0; j < list[i].kw.length; j++) {
+        if (text.indexOf(list[i].kw[j]) >= 0) hits++;
+      }
+      if (hits > bestHits) { bestHits = hits; best = list[i]; }
+    }
+    if (best) { best.matched = true; return best; }
+    for (var k = 0; k < list.length; k++) if (list[k].id === fallbackId) { list[k].matched = false; return list[k]; }
+    list[0].matched = false;
+    return list[0];
+  }
+
+  function findById(list, id) {
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return list[0];
+  }
+
+  function analyse(raw) {
+    var text = String(raw || "").toLowerCase();
+    var role = null, roleHits = 0;
+    for (var i = 0; i < ROLES.length; i++) {
+      var h = 0;
+      for (var j = 0; j < ROLES[i].kw.length; j++) if (text.indexOf(ROLES[i].kw[j]) >= 0) h++;
+      if (h > roleHits) { roleHits = h; role = ROLES[i]; }
+    }
+    var d = role || {n:null, signal:"topic", artifact:"post", dest:"threads"};
+
+    var signal   = pick(SIGNALS,   text, d.signal);
+    var artifact = pick(ARTIFACTS, text, d.artifact);
+    var dest     = pick(DESTS,     text, d.dest);
+    var trigger  = pick(TRIGGERS,  text, "manual");
+
+    // 冇講明出邊度、而產出係一份摘要 → 預設淨係自己睇（唔好幫人哋決定出街）
+    if (!dest.matched && artifact.id === "report") dest = findById(DESTS, "internal");
+
+    var s = {
+      raw: String(raw || "").trim(),
+      role: role ? role.n : null,
+      signal: signal, artifact: artifact, dest: dest, trigger: trigger,
+      signalTech: signal.tech.slice()
+    };
+
+    s.cells = [
+      {box:BOXES[0], ans:signal.label,   tip:signal.tip,   isNew:signal.newBox,  tech:signal.tech},
+      {box:BOXES[1], ans:"對住 Ommi Brain 打分 ＋ 一句理由", tip:"Engagement 升優先次序，永遠唔升 confidence。幾多 like 都仲係 signal。", isNew:false, tech:["brain","codex"]},
+      {box:BOXES[2], ans:artifact.label, tip:artifact.tip, isNew:artifact.newBox, tech:artifact.tech},
+      {box:BOXES[3], ans:dest.label,     tip:dest.tip,     isNew:dest.newBox,     tech:dest.tech},
+      {box:BOXES[4], ans:trigger.label,  tip:trigger.tip,  isNew:false,           tech:trigger.tech},
+      {box:BOXES[5], ans:"批準同出街留返俾人撳",
+       tip:"五條排除法則中任何一條，嗰步就唔可以全自動：憑證・成本・等待・不可逆・高變化。", isNew:false, tech:[]}
+    ];
+
+    s.newCount = 0;
+    for (var c = 0; c < s.cells.length; c++) if (s.cells[c].isNew) s.newCount++;
+
+    s.risks = [];
+    for (var r = 0; r < RISK_RULES.length; r++) {
+      if (RISK_RULES[r].test(s)) s.risks.push({n:RISK_RULES[r].n, say:RISK_RULES[r].say(s)});
+    }
+
+    s.flow = buildFlow(s);
+    s.prompts = buildPrompts(s);
+    return s;
+  }
+
+  function buildFlow(s) {
+    var f = [];
+    f.push({t:"設定頁", d:"放你嘅判斷標準同一條 key 檢查。key 只讀 server env，畫面永遠唔顯示值。"});
+    f.push({t:"收料頁", d:"一個「" + (s.signal.id === "topic" ? "搵靈感" : "掃一次") + "」掣，跑一次出最多五張卡，每張有來源、信心、點解係而家。"});
+    f.push({t:"揀一張", d:"你揀，唔係機揀。揀完寫一句理由——呢句係之後所有產出嘅根。"});
+    f.push({t:"產出頁", d:"由揀咗嗰張卡整出" + s.artifact.label + "，來源 ID 跟住走。"});
+    if (s.dest.id !== "internal") {
+      f.push({t:"預演（dry-run）", d:"列出去邊個帳戶、完整內容、附件、公開之後會發生咩。預演唔係批準。"});
+      f.push({t:"批準同出街", d:"你撳批準，只發一次，回傳 submitted 同 published 分開顯示，查唔到就標 UNKNOWN。"});
+    } else {
+      f.push({t:"你自己個清單", d:"只喺面板睇，唔出街。呢個版本冇不可逆風險，最抵先做。"});
+    }
+    if (s.trigger.id !== "manual") {
+      f.push({t:"排程表", d:"draft／scheduled／published 三欄讀返；一個上限、一個 kill switch、一行 log。"});
+    }
+    return f;
+  }
+
+  function stopClause(s) {
+    if (s.dest.id === "internal") return "唔好出街、唔好改資料庫結構。";
+    if (s.dest.id === "email") return "做到已批準就停，唔好自動寄出。";
+    return "唔好發布、唔好超過本輪上限。";
+  }
+
+  function buildPrompts(s) {
+    var p = [];
+    p.push({
+      lab: "第 1 格｜收料",
+      why: "講清楚收邊度、上限幾多、失敗點做——上限寫喺 prompt 入面，唔係寫喺你個腦入面。",
+      text: "喺我個 app 加一個「掃一次」動作，收" + s.signal.label + "，最多出五張卡，每張填來源角色、信心同點解係而家。冇 key 就用 fixtures 標 DEMO。唔好寫帖、唔好發布。",
+      ev: "重新整理頁面，五張卡仲喺度，runs log 見到用咗幾多 credits（或 DEMO 標記）。"
+    });
+    p.push({
+      lab: "第 3 格｜產出",
+      why: "指定入面係乜、出嚟係乜，同埋邊樣嘢一個字都唔准郁。",
+      text: "用我揀咗嗰張卡整一份" + s.artifact.label + "，入面係卡加我嘅 Brain 規則，出嚟要帶返來源 ID。事實同數字唔准變。先並排俾我睇。" + stopClause(s),
+      ev: "並排睇到原文同產出，三個事實仲喺度，來源 ID 跟住產出走。"
+    });
+    p.push({
+      lab: "第 4 格｜落地",
+      why: "只做預演，唔做真嘢——把最後嗰下留返俾人，就係第六格。",
+      text: "為呢一份做一次本機預演：列出目標帳戶、完整內容、附件、同埋公開之後會發生咩。檢查字數同重複。預演唔係批準，唔好調用任何會公開嘅 API。",
+      ev: "見到帳戶名、完整內容同 content_hash；冇任何嘢真係出咗去。"
+    });
+    return p;
+  }
+
+  /* ---------- render ---------- */
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = null;
+
+  function esc(t) {
+    return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function render(s) {
+    state = s;
+
+    $("newCount").textContent = s.newCount;
+    $("revealLine").textContent = s.newCount === 0
+      ? "六格入面，零格要新起。"
+      : "六格入面，你只有 " + s.newCount + " 格要新起。";
+    $("revealSub").textContent = s.newCount === 0
+      ? "呢個 idea 完全落喺你已經起咗嘅嘢入面——換個設定就行得。"
+      : "其餘 " + (6 - s.newCount) + " 格，你喺第五、六堂已經起咗。轉行業唔係由零開始，係換第一格同第四格。";
+
+    var cellsHtml = "";
+    for (var i = 0; i < s.cells.length; i++) {
+      var c = s.cells[i];
+      cellsHtml +=
+        '<div class="cell' + (c.isNew ? " new" : "") + '">' +
+          '<div class="cell-top">' +
+            '<span class="cell-n">格 ' + c.box.n + '</span>' +
+            '<span class="chip ' + (c.isNew ? "new" : "keep") + '">' + (c.isNew ? "要新起" : "沿用") + '</span>' +
+          '</div>' +
+          "<h3>" + esc(c.box.t) + "</h3>" +
+          '<p class="q">' + esc(c.box.q) + "</p>" +
+          '<p class="ans">' + esc(c.ans) + "</p>" +
+          '<p class="tip">' + esc(c.tip) + "</p>" +
+        "</div>";
+    }
+    $("cells").innerHTML = cellsHtml;
+
+    var seen = {}, rows = "";
+    for (var b = 0; b < s.cells.length; b++) {
+      var cell = s.cells[b];
+      for (var t = 0; t < cell.tech.length; t++) {
+        var key = cell.tech[t], tech = TECH[key];
+        if (!tech || seen[key]) continue;
+        seen[key] = 1;
+        rows += "<tr><td>" + esc(cell.box.t) + "</td>" +
+                "<td><b>" + esc(tech.n) + "</b>" + (tech.k2 ? '<br><span class="warn">' + esc(tech.k2) + "</span>" : "") + "</td>" +
+                '<td><span class="kind ' + tech.k + '">' + tech.k + "</span></td>" +
+                "<td>" + esc(tech.g) + "</td>" +
+                "<td>" + esc(tech.c) + "</td></tr>";
+      }
+    }
+    $("techBody").innerHTML = rows;
+
+    var flowHtml = "";
+    for (var f = 0; f < s.flow.length; f++) {
+      flowHtml += "<li><b>" + esc(s.flow[f].t) + "</b><span>" + esc(s.flow[f].d) + "</span></li>";
+    }
+    $("flow").innerHTML = flowHtml;
+
+    var riskHtml = "";
+    for (var r = 0; r < s.risks.length; r++) {
+      riskHtml += '<div class="risk"><b>' + esc(s.risks[r].n) + "</b><span>" + esc(s.risks[r].say) + "</span></div>";
+    }
+    $("risks").innerHTML = riskHtml;
+
+    var pHtml = "";
+    for (var q = 0; q < s.prompts.length; q++) {
+      var pr = s.prompts[q], len = pr.text.length, ok = len >= 50 && len <= 100;
+      pHtml += '<div class="pr">' +
+        '<div class="pr-h"><b>' + esc(pr.lab) + "</b>" +
+        '<span class="count ' + (ok ? "ok" : "over") + '">' + len + " 字" + (ok ? "" : "・超出 50–100") + "</span></div>" +
+        "<pre>" + esc(pr.text) + "</pre>" +
+        '<p class="ev"><b>點解咁寫</b>' + esc(pr.why) + "</p>" +
+        '<p class="ev"><b>見到呢個結果先繼續</b>' + esc(pr.ev) + "</p>" +
+        "</div>";
+    }
+    $("prompts").innerHTML = pHtml;
+
+    $("out").hidden = false;
+    $("fillOut").textContent = "";
+  }
+
+  /* ---------- examples + controls ---------- */
+
+  var EGS = [
+    "我係做 marketing 嘅，做咗十年，想有部機幫我自動出社交帖。",
+    "我做音樂，想有個 OS 幫我監察啲 artist 嘅動態，再幫我做 outreach。",
+    "我開緊間小店，想知同行改咗咩價錢同餐牌，每朝出一份摘要俾我。"
+  ];
+
+  var egsHtml = "";
+  for (var e = 0; e < EGS.length; e++) {
+    egsHtml += '<button class="eg" data-i="' + e + '">' + esc(EGS[e]) + "</button>";
+  }
+  $("egs").innerHTML = egsHtml;
+  $("egs").addEventListener("click", function (ev) {
+    var b = ev.target.closest(".eg");
+    if (!b) return;
+    $("idea").value = EGS[Number(b.dataset.i)];
+    run();
+  });
+
+  function run() {
+    var v = $("idea").value.trim();
+    if (!v) { $("idea").focus(); return; }
+    render(analyse(v));
+    $("out").scrollIntoView({behavior: "smooth", block: "start"});
+  }
+  $("go").addEventListener("click", run);
+  $("idea").addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") run();
+  });
+
+  $("bigBtn").addEventListener("click", function () {
+    var on = document.body.classList.toggle("big");
+    this.setAttribute("aria-pressed", String(on));
+  });
+  $("themeBtn").addEventListener("click", function () {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+    this.setAttribute("aria-pressed", String(!dark));
+    this.textContent = dark ? "深色" : "淺色";
+  });
+
+  /* ---------- layer 2: sample (optional, degrades to nothing) ---------- */
+
+  var COPY = {
+    not_granted: "你揀咗唔准——六格同 prompt 照用。",
+    sampling_disabled: "呢個帳戶用唔到，六格同 prompt 照用。",
+    rate_limited: "撳得太密，唞一陣再試。",
+    session_expired: "要重新登入先用得。",
+    refused: "換個講法再試。",
+    invalid_json: "答得唔齊，撳多次。",
+    empty_completion: "冇答到嘢，簡化條輸入再試。",
+    cancelled: ""
+  };
+  function copyFor(code) { return COPY[code] || "接唔到，遲啲再試。"; }
+
+  var ctl = null;
+
+  (async function () {
+    var sample = null;
+    try { sample = await window.claude.use("sample"); } catch (err) { sample = null; }
+    if (!sample) return;
+
+    var btn = $("fillBtn"), stop = $("stopBtn"), out = $("fillOut"), note = $("fillNote");
+    btn.hidden = false;
+    note.textContent = "補肉會用你自己個 Claude 帳戶，第一次會問你準唔準。";
+
+    stop.addEventListener("click", function () { if (ctl) ctl.abort(); });
+
+    btn.addEventListener("click", async function () {
+      if (!state) return;
+      btn.disabled = true; stop.hidden = false;
+      out.textContent = "諗緊…";
+      ctl = new AbortController();
+      var ask =
+        "你係一個香港嘅系統設計導師，用繁體中文同香港口語書面語（廣東話語感）作答，唔好用書面語腔。\n\n" +
+        "呢個人講：「" + state.raw + "」\n\n" +
+        "個系統已經拆咗做六格：\n" +
+        "1 睇乜：" + state.signal.label + "\n" +
+        "2 點判斷：對住佢自己嘅 Brain 打分\n" +
+        "3 出乜：" + state.artifact.label + "\n" +
+        "4 去邊：" + state.dest.label + "\n" +
+        "5 幾時做：" + state.trigger.label + "\n" +
+        "6 邊度會炸：批準同出街留返俾人\n\n" +
+        "寫返三段，每段一個標題行，總共唔好超過 220 字：\n" +
+        "【一句比喻】用佢自己行業嘅嘢做比喻，講呢部機其實係邊個崗位。\n" +
+        "【最容易做錯嗰樣】針對佢呢行，一句講佢最可能整錯嘅嘢。\n" +
+        "【成功定義】寫得刻薄：「XX 唔係成功。成功 = 重新整理之後你見到 YY。」\n\n" +
+        "唔好列 tech、唔好寫 prompt、唔好重複上面六格。";
+      try {
+        await sample(ask, {
+          signal: ctl.signal,
+          modelTier: "quick",
+          onText: function (u) { out.textContent = u.text; }
+        });
+      } catch (err) {
+        var t = err && err.text;
+        out.textContent = t ? t : "";
+        if (err && err.code !== "cancelled") {
+          note.textContent = copyFor(err.code);
+          if (err.code === "not_granted" || err.code === "sampling_disabled" ||
+              err.code === "not_declared" || err.code === "capability_disabled") {
+            btn.hidden = true;
+          }
+        }
+      } finally {
+        btn.disabled = false; stop.hidden = true; ctl = null;
+      }
+    });
+  })();
+})();
+</script>

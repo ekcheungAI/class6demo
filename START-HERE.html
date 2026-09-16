@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第六堂｜由 queue 出街，設定你自己改</title>
+<style>
+:root{--ink:#15121c;--dim:#6a6478;--hair:#e2ded8;--bg:#faf9f7;--panel:#fff;
+ --violet:#5b3ecc;--vsoft:#f0ecfd;--lime:#4a5800;--limebg:#eaf5b8;--amber:#8a4f06;--amberbg:#fbeacf;
+ --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+ --sans:-apple-system,BlinkMacSystemFont,"PingFang HK","Microsoft JhengHei","Noto Sans TC",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 var(--sans);padding-inline:16px}
+.wrap{max-width:860px;margin:0 auto;padding-block:36px 90px}
+h1{font-size:clamp(27px,5vw,40px);line-height:1.15;margin:0 0 8px;letter-spacing:-.02em}
+.lede{color:var(--dim);margin:0 0 6px}
+.spine{font-weight:700;color:var(--violet);margin:0 0 26px}
+h2.act{margin:46px 0 14px;font-size:20px;padding-bottom:8px;border-bottom:2px solid var(--violet)}
+h2.big{margin:46px 0 12px;font-size:22px}
+.box{background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:18px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){.grid3{grid-template-columns:1fr}}
+.grid3 .box{margin:0}
+.grid3 b{display:block;color:var(--violet);font-size:13px;margin-bottom:4px}
+.fld{display:block;margin-bottom:10px}
+.fld span{display:block;font-size:13px;color:var(--dim);margin-bottom:4px}
+.fld input{width:100%;font:15px var(--sans);padding:9px 11px;border:1px solid var(--hair);border-radius:5px;background:var(--bg)}
+.fld input:focus{outline:2px solid var(--violet);outline-offset:1px}
+.trk{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.trk button{font:600 14px var(--sans);padding:9px 14px;border:1px solid var(--hair);background:var(--panel);
+ border-radius:5px;cursor:pointer;color:var(--dim)}
+.trk button[aria-pressed=true]{background:var(--violet);border-color:var(--violet);color:#fff}
+.step{background:var(--panel);border:1px solid var(--hair);border-radius:8px;padding:18px;margin-bottom:12px}
+.step.watch{background:#fbfaff;border-style:dashed}
+.step.hw{border-color:var(--violet)}
+.step header{display:flex;gap:12px;align-items:flex-start}
+.tick{flex:none;margin-top:3px;cursor:pointer}
+.tick input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.tick span{display:block;width:22px;height:22px;border:2px solid var(--hair);border-radius:5px}
+.tick input:checked+span{background:var(--violet);border-color:var(--violet)}
+.tick input:checked+span::after{content:"";display:block;width:6px;height:11px;margin:2px auto;
+ border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.tick input:focus-visible+span{outline:2px solid var(--violet);outline-offset:2px}
+.step.done{opacity:.55}
+.hd{flex:1}
+.meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:3px}
+.no{font:700 12px var(--mono);color:var(--dim)}
+.time{font:600 12px var(--mono);color:var(--violet);background:var(--vsoft);padding:2px 6px;border-radius:3px}
+.lane{font:700 11px var(--sans);padding:3px 7px;border-radius:3px}
+.lane.do{background:var(--limebg);color:var(--lime)}
+.lane.watch{background:var(--amberbg);color:var(--amber)}
+.lane.hw{background:var(--vsoft);color:var(--violet)}
+.sl{font:600 11px var(--mono);color:var(--dim);border:1px solid var(--hair);padding:2px 5px;border-radius:3px}
+.step h3{margin:0;font-size:19px;line-height:1.35}
+.story{margin-top:10px}
+.story p{color:#4a4458}
+.story p,.blk p{margin:.5em 0}
+.blk{margin-top:12px;padding:11px 13px;border-radius:6px;background:var(--bg);border:1px solid var(--hair)}
+.blk>b{display:block;font-size:12px;letter-spacing:.05em;color:var(--dim);margin-bottom:3px}
+.blk.decide{background:var(--vsoft);border-color:#d6ccf7}
+.blk.ev{background:var(--limebg);border-color:#cfe08a}
+.blk.ev>b{color:var(--lime)}
+.blk ul{margin:.4em 0;padding-left:1.2em}
+.pwrap{margin-top:13px;border:1px solid var(--violet);border-radius:7px;overflow:hidden}
+.phead{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:9px 12px;background:var(--vsoft)}
+.pid{font:700 12px var(--mono);color:var(--violet)}
+.pmodel{font:500 11px var(--mono);color:var(--dim);flex:1;min-width:120px}
+button.copy{font:600 13px var(--sans);padding:7px 13px;border:none;border-radius:5px;background:var(--violet);color:#fff;cursor:pointer}
+button.copy.ok{background:var(--lime)}
+pre{margin:0;padding:14px;white-space:pre-wrap;word-break:break-word;font:15px/1.7 var(--sans);background:var(--panel)}
+.slot{background:#fff3b0;border-bottom:2px solid #d4a800;padding:0 3px;border-radius:2px}
+.slot.filled{background:var(--limebg);border-color:#9bb400}
+.ctx{margin:0;padding:8px 14px 12px;font-size:13px;color:var(--dim);background:var(--panel)}
+.resc{margin-top:11px;border:1px solid var(--hair);border-radius:6px;background:var(--bg)}
+.resc summary{cursor:pointer;padding:9px 12px;font-size:14px;font-weight:600;color:var(--dim)}
+.resc pre{background:transparent;padding:0 12px 10px;font-size:14px}
+.resc button{margin:0 12px 12px}
+code{font:.9em var(--mono);background:var(--vsoft);padding:1px 4px;border-radius:3px}
+.note{font-size:14px;color:var(--dim)}
+footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--hair);color:var(--dim);font-size:14px}
+@media print{.trk,button.copy,.tick{display:none}.step{break-inside:avoid;border-color:#ccc}body{background:#fff}}
+</style></head><body><div class="wrap">
+
+<h1>第六堂｜由 queue 出街，設定你自己改</h1>
+<p class="lede">你部機已經識自己攞料、識改寫、識出圖。今堂接通最後一段：出到街，而且啲設定由你改，唔使再叫 Codex。</p>
+<p class="spine">呢一頁跟住投影一步步行。每一步有：要做乜、貼邊條 prompt、見到乜先好繼續。</p>
+
+<h2 class="big">今日帶走三件</h2>
+<div class="grid3">
+  <div class="box"><b>一篇真係出咗街嘅帖</b>由你批準、經 queue 發出去，手機開得到條連結。</div>
+  <div class="box"><b>一個跟你把聲嘅 Rewrite</b>讀你三條 voice rules，引擎搬咗去 DeepSeek。</div>
+  <div class="box"><b>一個你自己改得到嘅設定頁</b>改一條規則，重新跑，輸出即刻唔同——全程唔使開 Codex。</div>
+</div>
+
+<h2 class="big">開始之前：填一次，全部 prompt 自動換</h2>
+<div class="box">
+  <p class="note">下面七格係今日要你自己決定嘅嘢。填咗之後，每條 prompt 入面嘅 <span class="slot">【　　】</span> 會自動變成你填嘅字，複製出去就已經係你嗰版。只存喺呢個瀏覽器，唔會上傳。</p>
+  <label class="fld"><span>我讀者今個星期要決定嘅係</span><input id="f_reader" data-f="reader" placeholder="例：值唔值得用 AI 幫手出帖"></label><label class="fld"><span>三條規則入面我最想守住嗰條</span><input id="f_rule" data-f="rule" placeholder="例：開場先講讀者問題"></label><label class="fld"><span>我今日要出嘅平台</span><input id="f_platyes" data-f="platyes" placeholder="例：Threads"></label><label class="fld"><span>唔出嘅平台</span><input id="f_platno" data-f="platno" placeholder="例：Instagram"></label><label class="fld"><span>我批準呢篇嘅理由</span><input id="f_approve" data-f="approve" placeholder="一句就夠"></label><label class="fld"><span>我想排幾點</span><input id="f_schedtime" data-f="schedtime" placeholder="例：晚上 9"></label><label class="fld"><span>點解揀呢個時間</span><input id="f_schedwhy" data-f="schedwhy" placeholder="例：我讀者放工之後先睇手機"></label>
+  <p class="note" id="fillmsg">未填晒都用得——冇填嘅位會保留 <span class="slot">【　　】</span>，你貼咗去 Codex 之後自己打都得。</p>
+</div>
+
+<h2 class="big">你今日行邊條路</h2>
+<div class="box">
+  <div class="trk">
+    <button data-t="pro" aria-pressed="false">Pro｜有 Upload-Post key</button>
+    <button data-t="free" aria-pressed="false">Free｜有自己 Threads token</button>
+    <button data-t="dry" aria-pressed="false">Dry-run｜今日冇匙</button>
+  </div>
+  <p class="note" id="trkmsg">揀咗之後，唔關你事嗰幾步會淡咗。<strong>Dry-run 唔係失敗</strong>——你一樣行齊成個流程、一樣交到功課、一樣入到第七堂。</p>
+</div>
+
+<h2 class="act">第一幕｜優化個 feed：線索唔係證據</h2>
+<section class="step" id="s00"><header><label class="tick"><input type="checkbox" data-s="00"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 00</span><span class="time">0:08–0:14</span><span class="lane do">你要做</span><span class="sl">V0</span><span class="sl">V11</span><span class="sl">D1</span></div><h3>開返上堂嘅 PersonalOS，收埋老師派嘅 key</h3></div></header><div class="story"><p>出版社重開。總編（Ommi Brain）上星期已經寫低咗自己口味，排程表（Queue）有一篇稿等緊。今日第一件事：數清楚手上有乜，同埋將老師派嘅幾條匙放入保險箱——唔會改任何功能。</p></div><div class="blk"><b>跟住做</b><p>1. 將老師派嘅 <code>CLASS06-API-KEYS.env</code> 放喺 PersonalOS 旁邊嘅 <code>private-credentials/</code>（冇就開一個）。</p><p>2. 打開 <code>fixtures/CLASS06-API-KEYS.env.example</code> 睇一次有邊幾個名——只有名，冇值。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>Key 有三個家：本機 <code>.env.local</code>、Vercel Environment Variables、老師嗰個 env 檔。三個家以外任何地方出現 key，都當已經公開，即刻叫老師換。</p><p>如果 Queue 係空嘅，先用 <code>checkpoints/act-0-l5-baseline/</code> 嗰張草稿，唔好即場再生成。</p></div><div class="pwrap"><div class="phead"><span class="pid">p1</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p1">複製 Prompt</button></div><pre data-tpl="p1">我而家用返上堂嘅 PersonalOS。請先只讀核對：部署網址登入到未、Ommi Brain 有冇已保存嘅品牌設定、Queue 有幾多張草稿。然後將 private-credentials 入面老師派嘅 CLASS06 env 檔合併到本機 env：缺值先補，已有相同值略過，已有不同值只列變數名問我；唔好顯示任何 key 值，唔好放入 Git。暫時唔好改功能、授權、發帖或 Deploy。</pre><p class="ctx">開始：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>用手機開你嘅 Vercel 網址，登入到，Queue 見到最少一張草稿</li><li>Codex 回報：網址 ✓／Brain ✓／草稿 N 張／已合併 N 個變數名（<strong>冇任何值出現</strong>）</li></ul></div></section>
+<section class="step" id="s01"><header><label class="tick"><input type="checkbox" data-s="01"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 01</span><span class="time">0:14–0:26</span><span class="lane do">你要做</span><span class="sl">V13</span><span class="sl">D1</span></div><h3>加多三種來源：一按出五張有分數嘅卡</h3></div></header><div class="story"><p>你個 feed 而家已經識自己攞料——RSS 同社交帳戶，定時跑。問題係佢淨係攞到「有嘢出咗」，攞唔到「呢單嘢可唔可信、關唔關我讀者事」。</p><p>今日請多一個研究員入嚟。佢唔係亂咁搵新聞，係行一條路：Exa 搵候選 → 你留低兩三條 → Firecrawl 讀返正文 → 有價格／數據就用 Tavily 搵第二來源 → 對住總編口味打分 → 先交五張卡上枱。呢條路已經包咗做一個 skill（personalos-research），有上限、有後備。每張卡寫住：邊類來源、幾可信、點解係而家、對你讀者有乜用。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>搜尋 query 唔係「AI 新聞」，係「我讀者今個星期要決定乜」+ 一個範圍詞（例如「小店」「Threads」）+ 時間窗。Query 收窄一格，卡嘅相關度升一級，credits 用少一半。</p></div><div class="pwrap"><div class="phead"><span class="pid">p2</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p2">複製 Prompt</button></div><pre data-tpl="p2">先裝 skills/personalos-research，已有就唔好重裝。按佢同 inspiration-card 合約，喺 Inspiration 現有嘅 feed 加多一個「搵靈感」來源：用我 Brain 嘅讀者同主題砌 query（我讀者今個星期要決定嘅係：<span class="slot" data-f="reader">【　　】</span>），Exa 搵候選、Firecrawl 只讀最多 3 頁、Tavily 只核對中高風險講法；按網址去重，每張卡填來源角色、信心、why_now、claim_risk、persona_score 同一句理由。冇 key 或者 API 死就用 fixtures 嘅五張示例卡並標 DEMO。唔好寫帖、唔好發布、唔好超過本輪上限。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Inspiration 頁多咗一個「搵靈感」掣（原本 RSS ／社交嗰啲照樣喺度）；按一次後出現最多五張卡</li><li>每張卡見到：來源角色（primary／independent／signal／marketing）、信心、發布時間同抓取時間分開、persona_score 同一句理由</li><li>重新整理頁面，五張卡仲喺度；runs log 見到 credits 用咗幾多（或 DEMO 標記）</li></ul></div><details class="resc"><summary>卡住？貼呢條</summary><pre data-tpl="r01">我在 Step 01 卡住：[貼遮蔽咗 key 嘅錯誤]。請分清係 key 未生效、Exa 搵唔到、Firecrawl 配額用晒、Tavily 唔通、定係卡冇入資料庫；只給我下一個最小檢查。唔好讀出 key，唔好加其他來源。</pre><button class="copy" data-p="r01">複製救援 Prompt</button></details></section>
+<section class="step" id="s02"><header><label class="tick"><input type="checkbox" data-s="02"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 02</span><span class="time">0:26–0:33</span><span class="lane do">你要做</span><span class="sl">V14</span><span class="sl">D1</span></div><h3>揀一張：知道問乜、睇乜</h3></div></header><div class="story"><p>五張卡上枱，總編唔會全部要。佢先問自己一條問題——「我讀者今個星期要決定乜？」——然後睇每張卡四樣嘢：來源角色、信心、點解係而家、對讀者有乜用。揀一張，寫一句理由。呢張卡就係下一幕 Rewrite 嘅來源。今日第一次 quiz：like 多，數字就可信？</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>兩張卡講同一件事：一張 primary（官方頁）、一張 signal（X 帖）——揀 primary 做來源，X 帖只做「有人討論緊」嘅角度。永遠唔會反轉。</p></div><div class="pwrap"><div class="phead"><span class="pid">p3</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p3">複製 Prompt</button></div><pre data-tpl="p3">用我啱啱嗰五張卡，幫我列一張表：每張卡嘅來源角色、信心、why_now、persona_score 同理由。我讀者今個星期要決定嘅係：【一句】。唔好幫我揀，等我揀一張並寫一句理由，再將嗰張卡標為今日來源。唔好寫帖。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>一張卡被標為「今日來源」，上面有你自己寫嘅一句理由</li><li>你答咗 Quiz 1（一條帖好多人 like，代表入面嘅數字可信？→ 唔係）</li></ul></div></section>
+<h2 class="act">第二幕｜我把聲：由通用改寫，變成你把聲</h2>
+<section class="step" id="s03"><header><label class="tick"><input type="checkbox" data-s="03"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 03</span><span class="time">0:33–0:41</span><span class="lane do">你要做</span><span class="sl">V1</span><span class="sl">D2</span></div><h3>由 Brain 抽出三條 voice rules</h3></div></header><div class="story"><p>編輯入職第一日，唔係即刻改稿，係先讀總編嘅口味，寫成三條可以照做嘅規則。規則寫得出「幾時用、幾時唔用」，先算規則；「要有溫度」唔算。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>規則要有適用範圍先會穩定：「開場先講讀者問題」加一句「只限教學短文，公告唔用」，Codex 先唔會亂套。</p></div><div class="pwrap"><div class="phead"><span class="pid">p4</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p4">複製 Prompt</button></div><pre data-tpl="p4">讀我已保存嘅 Ommi Brain，按 voice-rules 合約整理最多三條講法規則，每條寫適用範圍同一個正反例。事實、數字同來源永遠唔准改。先俾我睇，等我確認先保存；唔好改其他設定。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>打開 <code>contracts/voice-rules.md</code> 填好嘅版本：三條規則，每條有「適用」「唔適用」同一個例子</li><li>其中一條你自己改過一個字（證明你睇過）</li></ul></div></section>
+<section class="step" id="s04"><header><label class="tick"><input type="checkbox" data-s="04"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 04</span><span class="time">0:41–0:51</span><span class="lane do">你要做</span><span class="sl">V1</span><span class="sl">D2</span></div><h3>升級你個 Rewrite：跟三條規則，換 DeepSeek 引擎</h3></div></header><div class="story"><p>你個 rewrite 已經行緊，但佢而家做嘅係<strong>通用 respin</strong>——換句、順文，唔知你把聲係點。今日做兩件事：餵佢三條 voice rules，同埋把引擎由 ToAPI 搬去 DeepSeek。</p><p>順便學一件跟你成世嘅嘢：<strong>邊個功能用邊個引擎，係設定，唔係寫死。</strong></p><p>由今日起你部機有兩個文字引擎，因為佢哋做兩件唔同嘅事：</p><p>| 做乜 | 用邊個 | 幾時 |</p><p>|---|---|---|</p><p>| 打分（畀五張卡評分） | TopAPIs | 第一幕，第五堂已經接好 |</p><p>| <strong>我把聲（Rewrite）</strong> | ToAPI → <strong>DeepSeek</strong> | <strong>第二幕，今日搬引擎</strong> |</p><p>| 生圖 | TopAPIs | 第五幕，第五堂已經識 |</p><p>呢個唔係「邊個模型叻啲」嘅問題——係邊份工用邊條 key、爆咗一個唔會拖冧另一個。你今日要做嘅係喺 server env 多一條變數，再叫 Codex 指過去。<strong>記住呢個動作：功課要你再做一次</strong>（把老師嗰條換成你自己嗰條），第七堂比較模型又要做一次。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>叫 Codex 出稿之前先出「三欄對照表」（原句／改寫句／改咗嘅係講法定事實）。有表先有稿，事實被改嗰陣一眼見到紅字。</p></div><div class="blk"><p>DeepSeek 個 API <strong>同 OpenAI 格式兼容</strong>——即係話「換引擎」實際上只係改三樣嘢：</p><p>``<code></p><p>base_url   https://api.deepseek.com</p><p>model      deepseek-chat</p><p>api_key    讀 DEEPSEEK_API_KEY（server env，唔好寫死）</p><p></code>`<code></p><p>呢個就係點解 provider 換得。今日 Codex 會幫你接，但你要記住呢三行——功課換自己嗰條 key 嗰陣，只有 </code>api_key` 嗰行變，另外兩行一個字都唔使郁。</p><p>&gt; 官方文件：https://api-docs.deepseek.com/zh-cn/ ——行唔通就對返文件，唔好靠記憶改欄位名。</p></div><div class="pwrap"><div class="phead"><span class="pid">p5</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p5">複製 Prompt</button></div><pre data-tpl="p5">按 voice-rules 合約，升級我已有嘅 Rewrite（三條規則入面我最想守住：<span class="slot" data-f="rule">【　　】</span>）：入面係來源卡加規則，出嚟係改寫稿加來源 ID，事實同數字唔准變。文字模型行 `DEEPSEEK_API_KEY`，provider 同 model 名要讀 env、唔好寫死。用我標咗「今日來源」嗰張卡跑一次（冇就用 fixtures 嗰篇工具介紹），並排原文同改寫稿俾我睇。唔好改資料庫結構、唔好發帖、唔好 Deploy。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>畫面並排：左邊原文（事實逐條列）、右邊改寫稿</li><li>改寫稿事實一個冇變，開場由「功能」變成「讀者問題」</li><li>改寫稿帶住來源 ID</li><li>畫面或者 log 見到今次用咗邊個 model（證明佢係讀 env，唔係寫死）</li></ul></div><details class="resc"><summary>卡住？貼呢條</summary><pre data-tpl="r04">我在 Step 04 卡住：[貼 Screenshot 或錯誤]。請分清係規則讀唔到、功能未加到、`DEEPSEEK_API_KEY` 未生效、定係來源卡開唔到；只給我下一個最小動作。暫時唔好重寫成個 app。</pre><button class="copy" data-p="r04">複製救援 Prompt</button></details></section>
+<section class="step" id="s05"><header><label class="tick"><input type="checkbox" data-s="05"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 05</span><span class="time">0:51–0:56</span><span class="lane do">你要做</span><span class="sl">V1</span><span class="sl">D2</span></div><h3>圈三句：邊句係講法，邊句係事實</h3></div></header><div class="story"><p>總編抽查。你唔係睇靚唔靚，係圈三句：一句講法改得好、一句事實有冇被改、一句仲係套話。第二次 quiz：Persona 可唔可以改事實？</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>套話最易漏：「顛覆」「革命」「必學」係字面；「唔止咁簡單」「你一定要知」係句式。R2 加埋句式黑名單，第二輪先真係去到 AI 味。</p></div><div class="pwrap"><div class="phead"><span class="pid">p6</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p6">複製 Prompt</button></div><pre data-tpl="p6">用剛才嘅原文同改寫稿，幫我列一張三欄表：原句、改寫句、改咗嘅係講法定事實。有任何數字或聲稱原文冇嘅，標紅。唔好再改稿，等我先。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>三欄表最少三行；「事實」欄全部係「冇變」——如果有紅，叫 AI 改返，唔好跳步</li><li>你答咗 Quiz 2（Persona 可唔可以改事實？→ 唔可以）</li></ul></div></section>
+<h2 class="act">第三幕｜發行部接線：登入咗，唔等於每道門都開</h2>
+<section class="step" id="s06"><header><label class="tick"><input type="checkbox" data-s="06"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 06</span><span class="time">0:56–1:06</span><span class="lane do">你要做</span><span class="sl">V2</span><span class="sl">D3</span></div><h3>將你嘅 Threads token 放入 server env，只讀身份</h3></div></header><div class="story"><p>發行部要一條匙先入得平台。匙放保險箱（server env），唔放枱面（chat、截圖、NEXT_PUBLIC_）。放完唔急住出帖——先問平台「我係邊個、我有乜權限」。Pro track 同學用 Upload-Post key 做同一件事（Step 07）；冇匙嘅同學用 fixture 身份行完流程。</p></div><div class="blk"><b>跟住做</b><p>1. 投影熄咗先做。開 Vercel 專案 → Settings → Environment Variables，加 <code>THREADS_USER_ACCESS_TOKEN</code> 同 <code>THREADS_USER_ID</code>（值由你自己貼，唔係 Codex）。</p><p>2. Redeploy 一次，等綠燈。</p><p>3. 冇 token 嘅同學：跳去 Codex 貼下面指令，加一句「用 fixtures 嘅身份樣本」。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>身份讀取回覆入面加一行「權限清單入面有冇 publish」。有呢行，出帖失敗嗰陣你知係門未開，唔係匙錯。</p></div><div class="pwrap"><div class="phead"><span class="pid">p7</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p7">複製 Prompt</button></div><pre data-tpl="p7">我已經自己將 Threads token 放咗入 server env。請只做身份讀取：回報帳戶名、檢查時間、已核實嘅權限同未知項。唔好顯示、複製或記錄任何 key 值；唔好建立容器、唔好發帖。身份唔啱就停。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Connections 頁顯示你自己嘅 Threads 帳戶名、時間、權限清單（或 fixture 樣本帳戶，並清楚標「DEMO」）</li><li>Codex 回覆入面一個 key 值都冇出現過</li></ul></div><details class="resc"><summary>卡住？貼呢條</summary><pre data-tpl="r06">我在 Step 06 卡住：[貼遮蔽咗 key 嘅錯誤]。請分清係 env 未生效、token 過期、定係權限唔夠；只給我下一個最小檢查。唔好叫我貼 token 出嚟，唔好換其他人嘅帳戶。</pre><button class="copy" data-p="r06">複製救援 Prompt</button></details></section>
+<section class="step" id="s07"><header><label class="tick"><input type="checkbox" data-s="07"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 07</span><span class="time">1:06–1:10</span><span class="lane do">你要做</span><span class="sl">V2</span><span class="sl">D3</span></div><h3>（Pro）Upload-Post key 入 env，讀已連平台清單</h3></div></header><div class="story"><p>有啲同學想一次出幾個平台。Upload-Post 係代發行部：平台喺佢度先連好，你嘅 app 只需要一條 key。同一條規則：匙入保險箱，先讀清單，唔出帖。Free track 同學呢步睇老師做，唔使貼。</p></div><div class="pwrap"><div class="phead"><span class="pid">p8</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p8">複製 Prompt</button></div><pre data-tpl="p8">我已經將 Upload-Post API key 放咗入 server env。請只讀我已連接嘅平台清單，回報每個平台嘅名同狀態；唔好顯示 key，唔好建立或發送任何帖。清單係空就話我知，唔好幫我連。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Connections 頁列出 ≥2 個已連平台（Pro）；Free 同學呢行填 <code>SKIP · FREE TRACK</code></li><li>未連平台嘅名喺清單見得到，但狀態係「未連」，唔係假裝已連</li></ul></div></section>
+<section class="step watch" id="s08"><header><label class="tick"><input type="checkbox" data-s="08"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 08</span><span class="time">1:10–1:16</span><span class="lane watch">導師示範｜你唔使貼</span><span class="sl">V2</span></div><h3>老師示範：兩條路線各讀一次身份（導師示範｜你唔使貼）</h3></div></header><div class="story"><p>老師用自己帳戶行 Free 同 Pro 兩條線，畀你見到「讀到身份」同「可以出帖」係兩個畫面。呢步中咗「憑證」同「高變化」兩條排除法則（見收口嗰節），所以老師做、你睇。你要做嘅係講得出：token 讀到 @name，唔代表 publish 權限一定有。</p></div><div class="pwrap"><div class="phead"><span class="pid">p9</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p9">複製 Prompt</button></div><pre data-tpl="p9">用我自己嘅帳戶，分別經 Threads 直接路線同 Upload-Post 路線讀一次身份，並排顯示帳戶名、權限、已連平台；唔好發帖、唔好建立容器。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>投影見到兩個身份卡並排；老師指出邊一格係「權限」</li><li>你答咗 Quiz 3（有 token 就可以出帖？→ 唔一定）</li></ul></div></section>
+<section class="step" id="s09"><header><label class="tick"><input type="checkbox" data-s="09"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 09</span><span class="time">1:21–1:33</span><span class="lane do">你要做</span><span class="sl">V3</span><span class="sl">D4</span></div><h3>加 Composer 面板：來源 → 我把聲 → 平台卡</h3></div></header><div class="story"><p>排版台將編輯改好嘅稿排成唔同版面：Threads 一張、Instagram 一張、Newsletter 一張。每張卡有自己嘅內容指紋（hash）同狀態，全部由 draft 開始。排版台出嘅係草稿，唔係帖。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>三張卡 hash 一樣 = Composer 未按平台排版。叫佢每個平台加一條「格式規則」（Threads 500 字、IG 分段＋CTA、Newsletter 有標題），hash 自然唔同。</p></div><div class="pwrap"><div class="phead"><span class="pid">p10</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p10">複製 Prompt</button></div><pre data-tpl="p10">按 composer 合約，喺 PersonalOS 加一個 Composer 面板：揀一張靈感卡，按「我把聲」跑 Rewrite，再排成我已揀嘅平台卡（我今日要出：<span class="slot" data-f="platyes">【　　】</span>；唔出：<span class="slot" data-f="platno">【　　】</span>），每張卡有自己嘅 content_hash 同 draft 狀態，並自動入 Queue。用今日來源卡跑一次俾我睇。唔好發帖、唔好改資料庫結構。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Composer 面板見到「我把聲」按鈕</li><li>按一次之後 Queue 出現三張卡，每張卡顯示唔同 hash，狀態全部 draft</li><li>重新整理頁面，三張卡仲喺度</li></ul></div><details class="resc"><summary>卡住？貼呢條</summary><pre data-tpl="r09">我在 Step 09 卡住：[貼 Screenshot 或錯誤]。請分清係 Rewrite 冇被叫到、卡冇入 Queue、定係只係畫面未刷新；只給我下一個最小動作。唔好重做第二幕嘅功能。</pre><button class="copy" data-p="r09">複製救援 Prompt</button></details></section>
+<h2 class="act">第四幕｜排版台：一個來源，三張卡</h2>
+<section class="step" id="s10"><header><label class="tick"><input type="checkbox" data-s="10"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 10</span><span class="time">1:33–1:39</span><span class="lane do">你要做</span><span class="sl">V4</span><span class="sl">D4</span></div><h3>做一次 dry-run：會出乜、去邊、附乜</h3></div></header><div class="story"><p>出街前，印刷廠會俾你一張校對單：邊個帳戶、全文、內容指紋、附件、出咗之後會發生乜。你未簽名之前，機器一個字都唔會出。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>Dry-run 嘅全文讀出嚟聽一次。眼睇會漏，耳聽唔會——套話、錯數、唔啱你把聲嘅句，聽到即刻知。</p></div><div class="pwrap"><div class="phead"><span class="pid">p11</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p11">複製 Prompt</button></div><pre data-tpl="p11">為 Queue 入面我揀嘅一張卡做本機發布預演：列出目標帳戶、完整文字、content_hash、附件、以及公開後會發生咩。檢查平台字數限制同重複紀錄。預演唔係批準；唔好調用任何會公開嘅 API。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>畫面見到一個 dry-run 包：帳戶／全文／hash／附件（冇附件就寫「冇」）</li><li>卡狀態仍然係 draft；Threads／平台上面冇任何新帖</li></ul></div></section>
+<section class="step" id="s11"><header><label class="tick"><input type="checkbox" data-s="11"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 11</span><span class="time">1:39–1:44</span><span class="lane do">你要做</span><span class="sl">V4</span><span class="sl">D4</span></div><h3>改一個字，睇批準點樣失效</h3></div></header><div class="story"><p>你批準嘅唔係「呢篇帖」，係「呢個版本」。改一個字，指紋變，簽名作廢。第四次 quiz 就係呢個。</p></div><div class="blk"><b>跟住做</b><p>1. 喺 dry-run 包按「批準」（只係本機紀錄，未出街）。</p><p>2. 返 Queue 卡改一個字（例如「今日」→「今天」）。</p></div><div class="pwrap"><div class="phead"><span class="pid">p12</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p12">複製 Prompt</button></div><pre data-tpl="p12">我剛批準咗一個版本，然後改咗一個字。請讀返呢張卡：顯示舊 hash、新 hash、批準狀態變成點。唔好自動幫我重新批準，唔好發帖。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>卡顯示兩個 hash 唔同，批準狀態由「已批準」變返「未批準」</li><li>你答咗 Quiz 4（改一個字後，舊批準仲有效？→ 唔有效）</li></ul></div></section>
+<section class="step watch" id="s12"><header><label class="tick"><input type="checkbox" data-s="12"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 12</span><span class="time">1:52–1:59</span><span class="lane watch">導師示範｜你唔使貼</span><span class="sl">V5</span></div><h3>老師先出一篇：submitted、published、UNKNOWN 一齊睇（導師示範｜你唔使貼）</h3></div></header><div class="story"><p>老師用自己帳戶批準一篇、發一次，投影同時顯示三樣嘢：發出後返嘅 submitted id、查結果後嘅 published 連結、同用一個舊 id 示範查唔到嘅 UNKNOWN。呢步中咗「不可逆」嗰條排除法則（見收口嗰節），所以老師先做。你要做嘅係：講得出三個 ID 分別代表乜。</p></div><div class="pwrap"><div class="phead"><span class="pid">p13</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p13">複製 Prompt</button></div><pre data-tpl="p13">用我批準咗嘅版本經已測試嘅發布入口發一次；回傳 submitted id 同 published id 要分開顯示；之後查結果。再用 fixtures 嘅舊 id 示範查唔到嗰陣狀態點寫。冇確認公開結果就標 UNKNOWN，唔好自動再發。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>投影三格：submitted id ／ published 連結（真係開到）／ UNKNOWN 卡寫住「再查一次」</li><li>白板寫：published 1 · unknown 0 · dry-run 0（老師嗰行）</li></ul></div></section>
+<h2 class="act">第五幕｜出街：三個 ID，三個意思</h2>
+<section class="step" id="s13"><header><label class="tick"><input type="checkbox" data-s="13"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 13</span><span class="time">1:59–2:10</span><span class="lane do">你要做</span><span class="sl">V5</span><span class="sl">D5</span></div><h3>輪到你：批準 → 只發一次 → 查結果</h3></div></header><div class="story"><p>有匙嘅同學而家簽名出街；出咗之後第一件事唔係慶祝，係查。Dry-run track 同學行到「已批準」就停，卡上面寫 <code>SKIP · DRY-RUN TRACK</code>，完全正常。<strong>Pro 同學出 Upload-Post；Free 同學出 Threads；一人只出一篇。</strong></p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>UNKNOWN 出現嗰陣，先睇 runs log 最後一行：有 submitted id 就係「已收到」，冇就係「未發出」。兩個唔同答案，一個都唔係「再撳」。</p></div><div class="pwrap"><div class="phead"><span class="pid">p14</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p14">複製 Prompt</button></div><pre data-tpl="p14">我已經睇過預演，批準呢個帳戶、呢個版本、呢個附件狀態出一次（我批準嘅理由：<span class="slot" data-f="approve">【　　】</span>）。只經已測試嘅發布入口發一次；有未填欄、內容改動或重複風險就停。回傳 submitted id 同 published id 分開；查唔到公開結果就標 UNKNOWN，唔好自動再發。唔好輸出任何 key。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Queue 卡狀態變成 published，卡上面有公開連結，你用手機開到嗰篇帖</li><li>或者卡寫住 UNKNOWN，你按咗「再查一次」，狀態仍然誠實</li><li>白板數字加一（published／unknown／dry-run 其中一格）</li></ul></div><details class="resc"><summary>卡住？貼呢條</summary><pre data-tpl="r13">我在 Step 13 卡住：[貼遮蔽咗 key 嘅錯誤]。請分清係批準唔對版本、權限唔夠、平台限制、定係結果未明；只給我下一個最小檢查。唔好重新提交，唔好換帳戶。</pre><button class="copy" data-p="r13">複製救援 Prompt</button></details></section>
+<section class="step" id="s14"><header><label class="tick"><input type="checkbox" data-s="14"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 14</span><span class="time">2:10–2:18</span><span class="lane do">你要做</span><span class="sl">V6</span><span class="sl">D5</span></div><h3>附一張圖上卡（生圖你已經識）</h3></div></header><div class="story"><p>上堂你已經有品牌模板。今日用同一套模板配今日文案出一張，保存到 Storage，附到 Queue 卡。生成成功同保存成功係兩件事；附件變咗，卡要再批。每人生成一張，唔重試。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>預覽 prompt 免費，生成收費。預覽睇三樣：主張同稿一致、冇未核實數字、手機尺寸讀得到。三樣齊先撳 Generate。</p></div><div class="pwrap"><div class="phead"><span class="pid">p15</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p15">複製 Prompt</button></div><pre data-tpl="p15">用我第五堂已經用開嗰個生圖流程出一張圖，附到呢張 Queue 卡。生圖點用你已經識，唔使重新教我。只生成一次，唔自動重試。冇 key 或者生成失敗，就用 `fixtures/brand-image-sample.png` 附到卡並標 DEMO。唔好發帖。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Storage 入面有張圖，Queue 卡見到縮圖同 attachment id</li><li>卡嘅批準狀態變返「未批準」（因為附件變咗）</li><li>圖生成咗但卡冇圖：先「重新讀取」，再「附到所選草稿」，唔好 Generate 第二次</li><li>冇 key／冇圖 fixture：驗收台第 6 行寫 <code>SKIP · IMAGE</code>，<strong>完全正常</strong>，唔影響之後任何一步</li></ul></div></section>
+<section class="step watch" id="s15"><header><label class="tick"><input type="checkbox" data-s="15"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 15</span><span class="time">2:18–2:20</span><span class="lane watch">導師示範｜你唔使貼</span></div><h3>品牌影片：老師播 fixture，講一次生成路線（導師示範｜你唔使貼）</h3></div></header><div class="story"><p>品牌片要等又要錢，班房唔一齊生成。老師播一條已 render 嘅 11 秒片（logo、文案卡、CTA），開一次生成路線畀你睇，然後片留功課。同一條規則：片係附件，附件變咗要再批。</p></div><div class="pwrap"><div class="phead"><span class="pid">p16</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p16">複製 Prompt</button></div><pre data-tpl="p16">播 fixtures 入面嘅品牌短片，然後只列出生成一條同款片嘅步驟、要等幾耐、大約成本；唔好即場生成，唔好上傳，唔好發帖。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>你睇咗一條 11 秒片，講得出三格係乜</li><li>你抄低咗功課要做嘅三步（生成 → 附卡 → 再批）</li></ul></div></section>
+<section class="step" id="s16"><header><label class="tick"><input type="checkbox" data-s="16"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 16</span><span class="time">2:25–2:32</span><span class="lane do">你要做</span><span class="sl">V8</span><span class="sl">D6</span></div><h3>由 queue 出街：排一次、睇路線、再取消</h3></div></header><div class="story"><p>排程表三欄：draft、scheduled、published。Scheduled 只係「已安排」，唔係「已出街」。</p><p>今日唔係叫你開一個「無人睇住自動出街」嘅掣——<strong>係叫你學識由 queue 出街</strong>。你批準一張卡、排佢入 queue、由 queue 幫你發，你喺旁邊睇住。分別喺：出街嘅路只有一條（queue），而唔係周圍都有個「發」掣。</p><p>你要做嘅係：設一個排期、重新整理、見到卡仲喺 scheduled，再取消返 draft——證明排咗入去仍然收得返。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>排期時間用讀者最多人睇嘅時段，唔係你方便嘅時段。第七堂有數先知；今日先寫低你嘅假設。</p><p>另外揀定：你張卡由 queue 出去嗰陣走邊條路——自己嘅 Threads token，定係 Upload-Post。兩條都得，但一張卡只可以揀一條。</p></div><div class="pwrap"><div class="phead"><span class="pid">p17</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p17">複製 Prompt</button></div><pre data-tpl="p17">讀返我 Queue 三欄各有幾多張卡。幫我為一張未批準嘅草稿設一個明日嘅排期（我揀<span class="slot" data-f="schedtime">【　　】</span>點，因為<span class="slot" data-f="schedwhy">【　　】</span>），核對日期、時間、時區；保存後我會重新整理再取消。唔好開任何自動發布，唔好發帖。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Queue 三欄各自見到卡；你設嘅排期卡重新整理後仲喺 scheduled 欄</li><li>卡上見到佢會走邊條路（<code>threads_direct</code> 定 <code>upload_post</code>）</li><li>取消排期後，卡返 draft 欄——<strong>排咗入 queue 仍然收得返，呢個就係點解出街要行 queue</strong></li></ul></div></section>
+<h2 class="act">第六幕｜由 queue 出街，設定你自己改</h2>
+<section class="step" id="s17"><header><label class="tick"><input type="checkbox" data-s="17"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 17</span><span class="time">2:32–2:36</span><span class="lane do">你要做</span><span class="sl">V9</span><span class="sl">V7</span><span class="sl">D6</span></div><h3>開個設定頁：voice rules、每日上限、kill switch 全部你自己改</h3></div></header><div class="story"><p>由第五堂到而家，你每次想改一個設定——換句 voice rule、調每日上限——都要開 Codex 叫佢改。咁樣即係本書喺你度，但支筆喺人哋度。</p><p>今日拎返支筆。加一個設定頁，放三樣嘢：<strong>你嘅三條 voice rules</strong>（呢個就係你部機嘅記憶——Rewrite 每次都讀佢）、<strong>每日上限</strong>、<strong>kill switch</strong>。改完即刻生效，唔使 Codex、唔使 deploy。</p><p>點解係呢三樣：佢哋全部<strong>可逆</strong>。改錯咗，改返轉頭就得。至於裝 cron——嗰個中「不可逆」排除法則，所以今日老師做畀你睇，你功課先做。</p></div><div class="blk decide"><b>貼之前，你要決定嘅一件事</b><p>三條 voice rules 入面，揀一條你而家就想改嘅。改完你會即場重新跑一次 rewrite，親眼睇住輸出跟新規則走——呢個就係「記憶」兩個字嘅實際意思。</p></div><div class="pwrap"><div class="phead"><span class="pid">p18</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p18">複製 Prompt</button></div><pre data-tpl="p18">加一個設定頁，可以改三樣嘢：我三條 voice rules、每日出帖上限、kill switch。三樣都存落資料庫，Rewrite 同排程每次執行前重新讀，改完唔使 deploy 就生效。kill switch 預設開住。唔好喺呢頁顯示任何 key，唔好開自動發布。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>設定頁改到一條 voice rule，儲存，重新整理仲喺度</li><li><strong>返去 Composer 再跑一次「我把聲」，輸出跟咗新規則</strong>——全程冇開過 Codex</li><li>每日上限同 kill switch 撳得郁；kill switch 關咗之後 runs log 寫住停咗</li><li>老師台：一個 cron 登記、cap 設 1、即場撳 kill switch 睇佢停（你今日唔開，功課先開）</li></ul></div><details class="resc"><summary>卡住？貼呢條</summary><pre data-tpl="r17">我在 Step 17 卡住：[貼 Screenshot 或錯誤]。請分清係設定存唔到 DB、Rewrite 冇重新讀設定、定係頁面根本冇接到；只給我下一個最小檢查。唔好開自動發布。</pre><button class="copy" data-p="r17">複製救援 Prompt</button></details></section>
+<section class="step hw" id="s99"><header><label class="tick"><input type="checkbox" data-s="99"><span></span></label><div class="hd"><div class="meta"><span class="no">Step 99</span><span class="time">課後功課</span><span class="lane hw">功課</span><span class="sl">V12</span></div><h3>下堂功課：出多兩篇、開自動、記三個數字</h3></div></header><div class="story"><p>Lesson 7 由你自己嘅數字開始。冇數字，就冇 loop。</p><p><strong>第一件事：換 key。</strong> 老師派嗰批 key 課後會停用（佢哋喺 chat 出現過，落咗 40 部機，唔停先係錯）。去 DeepSeek 開個戶口攞你自己嗰條 <code>DEEPSEEK_API_KEY</code>（新戶口有一次性免費額度，唔使信用卡；課前老師會派連結），換入 server env。呢個動作你今日喺 Step 04 已經做過一次，今次只係換返自己嗰條。</p><p><strong>第二件事：再出兩篇。</strong> 唔使重新搵料——用你今日已經收集咗嘅卡就得（咁就唔使靠老師嗰批搜尋 key）。每篇 dry-run → 你批準 → 只發一次 → 查結果。兩篇都出咗街，先開自動模式，每日上限 1，再逐篇手動記低三個數字。</p><p>課後約 45–60 分鐘，加三日等數字。</p></div><div class="pwrap"><div class="phead"><span class="pid">p19</span><span class="pmodel">CODEX · GPT-5.6 TERRA MEDIUM THINKING</span><button class="copy" data-p="p19">複製 Prompt</button></div><pre data-tpl="p19">我已經將自己嗰條 DEEPSEEK_API_KEY 放咗入 server env，幫我確認 Rewrite 而家讀緊佢。然後用我今日已經收集咗嘅卡再出兩篇：每篇 dry-run、我批準、只發一次、查結果。兩篇都 published 先開自動模式，每日上限 1，kill switch 開住畀我睇一次。每篇記低觀看、回覆、保存三個數字，缺值留空。唔好顯示任何 key。</pre><p class="ctx">繼續：PersonalOS 第六堂 同一PersonalOS專案；唔另建工作資料夾。</p></div><div class="blk ev"><b>見到呢個結果先繼續</b><ul><li>Queue 有 ≥3 張 published 卡，每張有連結同來源卡 ID</li><li>自動模式已開，cap = 1；runs log 最少有一行係 cron 觸發（唔係手動）</li><li>Rewrite 用緊你自己嗰條 key（老師嗰條停咗都照跑得）</li><li>一張三行表：每篇帖三個數字，缺值留空，唔當零</li><li>品牌片（可選）：生成一條、附到卡、重新批準；未做寫 <code>SKIP · VIDEO</code></li></ul><p><strong>功課完成定義：</strong>唔係交一份靚文件，而係你嘅 PersonalOS 喺你冇望住嘅時候搵到、寫咗、出咗一篇，而且你知佢幾時、出咗乜、有冇人睇。</p><p>---</p></div></section>
+
+<footer>
+<p><strong>唔好貼 key 出嚟。</strong>任何 token、API key 都只放 server env。唔入 chat、唔入截圖、唔入群組、唔入功課。</p>
+<p>呢一頁由 <code>LESSON-06-STUDENT-NOTES</code> 同 <code>classroom/prompts.json</code> 生成，所以同老師手上嗰份路線一定一致。</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var LS="l6start";
+  var state={f:{},t:"",done:{}};
+  try{ var raw=localStorage.getItem(LS); if(raw) state=Object.assign(state,JSON.parse(raw)); }catch(e){}
+  function save(){ try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){} }
+
+  // --- fill-once fields feed every slot that names them
+  function paint(){
+    document.querySelectorAll(".slot[data-f]").forEach(function(el){
+      var v=(state.f[el.dataset.f]||"").trim();
+      el.textContent = v || "【　　】";
+      el.classList.toggle("filled", !!v);
+    });
+    var n=Object.keys(state.f).filter(function(k){return (state.f[k]||"").trim();}).length;
+    document.getElementById("fillmsg").innerHTML = n===7
+      ? "七格填晒。每條 prompt 複製出去已經係你嗰版。"
+      : "填咗 "+n+" / 7。冇填嘅位會保留原本嘅空格，貼咗去再自己打都得。";
+  }
+  document.querySelectorAll("input[data-f]").forEach(function(inp){
+    inp.value = state.f[inp.dataset.f] || "";
+    inp.addEventListener("input", function(){ state.f[inp.dataset.f]=inp.value; save(); paint(); });
+  });
+
+  // --- copy: read the rendered <pre>, so slots are already substituted
+  function copyText(t, btn){
+    var done=function(){ var o=btn.textContent; btn.textContent="已複製 ✓"; btn.classList.add("ok");
+      setTimeout(function(){ btn.textContent=o; btn.classList.remove("ok"); },1600); };
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(t).then(done, function(){ fallback(t,done); });
+    } else fallback(t,done);
+  }
+  function fallback(t,done){
+    var ta=document.createElement("textarea"); ta.value=t;
+    ta.style.cssText="position:fixed;top:-9999px"; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); done(); }catch(e){ alert("複製唔到，請手動選取。"); }
+    document.body.removeChild(ta);
+  }
+  document.querySelectorAll("button.copy").forEach(function(b){
+    b.addEventListener("click", function(){
+      var pre=document.querySelector('pre[data-tpl="'+b.dataset.p+'"]');
+      if(pre) copyText(pre.innerText, b);
+    });
+  });
+
+  // --- track: dim the steps that are not yours
+  var TRACK={
+    pro:  {off:[], note:"Pro：Step 07 讀你已連平台；出街行 Upload-Post。"},
+    free: {off:["07"], note:"Free：Step 07 係 Pro 專用，你睇老師做就得；出街行你自己嘅 Threads token。"},
+    dry:  {off:["07","13"], note:"Dry-run：Step 07 同 13 你今日唔做——行到「已批準」就停，驗收台寫 SKIP · DRY-RUN TRACK。其餘每一步你都做齊，用示例資料一樣見到結果。"}
+  };
+  function applyTrack(){
+    document.querySelectorAll(".step").forEach(function(s){ s.style.opacity=""; s.dataset.off=""; });
+    var t=TRACK[state.t];
+    document.querySelectorAll(".trk button").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.dataset.t===state.t)); });
+    if(!t) return;
+    t.off.forEach(function(n){ var s=document.getElementById("s"+n); if(s){ s.style.opacity=".45"; s.dataset.off="1"; } });
+    document.getElementById("trkmsg").innerHTML =
+      t.note + ' <strong>Dry-run 唔係失敗</strong>——你一樣交到功課、一樣入到第七堂。';
+  }
+  document.querySelectorAll(".trk button").forEach(function(b){
+    b.addEventListener("click", function(){ state.t = (state.t===b.dataset.t ? "" : b.dataset.t); save(); applyTrack(); });
+  });
+
+  // --- progress ticks survive a reload
+  document.querySelectorAll("input[data-s]").forEach(function(c){
+    c.checked = !!state.done[c.dataset.s];
+    c.closest(".step").classList.toggle("done", c.checked);
+    c.addEventListener("change", function(){
+      state.done[c.dataset.s]=c.checked; save();
+      c.closest(".step").classList.toggle("done", c.checked);
+    });
+  });
+
+  paint(); applyTrack();
+})();
+</script>
+</body></html>
